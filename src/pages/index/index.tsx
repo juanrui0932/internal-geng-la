@@ -2,6 +2,7 @@ import { View, Text } from '@tarojs/components'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import FlowerMeme from '@/components/flower-meme'
+import EmptyPot from '@/components/empty-pot'
 import Taro from '@tarojs/taro'
 import { Network } from '@/network'
 import '@/components/garden/garden.css'
@@ -100,6 +101,8 @@ export default function Index() {
               onClick={() => handleFlowerClick(meme.id)}
             />
           ))}
+          {/* 空花盆 - 点击种植 */}
+          <EmptyPot index={memes.length} />
         </View>
       )}
     </View>

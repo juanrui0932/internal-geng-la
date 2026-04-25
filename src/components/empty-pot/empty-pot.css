@@ -1,0 +1,170 @@
+/* 空花盆容器 */
+.empty-pot-container {
+  position: relative;
+  width: 180px;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  animation: grow 0.8s ease-out forwards;
+  opacity: 0;
+  transform-origin: bottom center;
+}
+
+/* 空花盆悬停效果 */
+.empty-pot-container:active {
+  transform: scale(0.95);
+}
+
+/* 生长动画 */
+@keyframes grow {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* 提示文字 */
+.empty-pot-text {
+  position: absolute;
+  top: 60px;
+  width: 180px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5), 0 0 8px rgba(0, 0, 0, 0.3);
+  z-index: 3;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* 脉冲动画 */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* 花盆 */
+.pot {
+  position: absolute;
+  bottom: 0;
+  width: 120px;
+  height: 95px;
+  border-radius: 0 0 40px 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 2;
+  background: linear-gradient(135deg, var(--pot-color) 0%, var(--pot-color-light) 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 -10px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* 可爱的装饰图案 */
+.pot::before {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 2px, transparent 2px);
+  background-size: 12px 12px;
+  border-radius: 10px;
+}
+
+/* 可爱的小圆点装饰 */
+.pot::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 22px;
+  width: 9px;
+  height: 9px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  box-shadow: 13px 0 0 rgba(255, 255, 255, 0.6), 26px 10px 0 rgba(255, 255, 255, 0.6), 39px 0 0 rgba(255, 255, 255, 0.6), 52px 10px 0 rgba(255, 255, 255, 0.6);
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+/* 花盆边缘 */
+.pot-rim {
+  position: absolute;
+  top: -14px;
+  width: 135px;
+  height: 20px;
+  border-radius: 10px;
+  z-index: 3;
+  background: linear-gradient(135deg, var(--pot-color-light) 0%, var(--pot-color) 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* 可爱的装饰点 */
+.pot-rim::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.4) 4px, transparent 4px);
+  background-size: 18px 18px;
+  border-radius: 10px;
+}
+
+/* 花盆口 */
+.pot-opening {
+  position: absolute;
+  top: 0;
+  width: 105px;
+  height: 18px;
+  border-radius: 9px;
+  opacity: 0.6;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.1) 0%, transparent 70%);
+}
+
+/* 闪烁动画 */
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* 问号装饰 */
+.empty-pot-text::before {
+  content: '❓';
+  display: block;
+  font-size: 48px;
+  margin-bottom: 8px;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+/* 问号跳动 */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
