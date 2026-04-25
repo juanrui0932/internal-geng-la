@@ -193,18 +193,9 @@ export default function Detail() {
       </View>
 
       <ScrollView scrollY className="flex-1">
-        {/* 梗名称图片 */}
-        <View className="bg-white p-4 mb-3">
-          <Image
-            src={meme.content_image_url || meme.image_url}
-            mode="widthFix"
-            className="w-full rounded-xl"
-          />
-        </View>
-
         {/* 梗解释图片 */}
         {meme.explanation_image_url && (
-          <View className="bg-white px-4 pb-4 mb-3">
+          <View className="bg-white px-4 py-4 mb-3">
             <Image
               src={meme.explanation_image_url}
               mode="widthFix"
