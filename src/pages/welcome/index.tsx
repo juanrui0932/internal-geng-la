@@ -67,7 +67,7 @@ export default function Welcome() {
 
           {/* 标题 */}
           <Text className="block text-2xl font-bold text-gray-900 mb-2">
-            欢迎来到内部梗啦！
+            玩内部梗啦！
           </Text>
           <Text className="block text-sm text-gray-500 mb-8">
             先取个昵称，开始分享快乐吧

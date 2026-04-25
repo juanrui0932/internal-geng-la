@@ -159,7 +159,7 @@ export default function Profile() {
 
       {/* 底部信息 */}
       <View className="text-center mt-8 pb-8">
-        <Text className="block text-xs text-gray-400">内部梗啦！ - 让笑声传递</Text>
+        <Text className="block text-xs text-gray-400">玩内部梗啦！ - 让笑声传递</Text>
       </View>
     </View>
   )
