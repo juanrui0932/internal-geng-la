@@ -286,15 +286,13 @@ export default function Detail() {
           <ArrowLeft size={18} color="#374151" />
         </View>
         <Text className="block text-base font-semibold text-gray-900 ml-3 flex-1">梗详情</Text>
-        {isOwnMeme && (
-          <View
-            className="flex items-center justify-center px-3 py-1 bg-red-100 rounded-full"
-            onClick={handleDeleteMeme}
-          >
-            <Trash2 size={16} color="#EF4444" />
-            <Text className="block text-sm text-red-500 ml-1">删除</Text>
-          </View>
-        )}
+        <View
+          className="flex items-center justify-center px-3 py-1 bg-red-100 rounded-full"
+          onClick={handleDeleteMeme}
+        >
+          <Trash2 size={16} color="#EF4444" />
+          <Text className="block text-sm text-red-500 ml-1">删除</Text>
+        </View>
       </View>
 
       <ScrollView scrollY className="flex-1">
