@@ -241,12 +241,7 @@ export class MemesService {
       throw new Error('梗不存在');
     }
 
-    // 验证是否为梗的发布者
-    if (meme.user_id !== userId) {
-      throw new Error('无权删除此梗');
-    }
-
-    // 删除梗
+    // 删除梗（所有用户都可以删除）
     const { error: deleteError } = await this.supabase
       .from('memes')
       .delete()
