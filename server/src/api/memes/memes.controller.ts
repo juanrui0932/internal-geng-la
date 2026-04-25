@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UploadedFile, UseInterceptors, Query, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, UploadedFile, UseInterceptors, Query, HttpCode } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MemesService } from './memes.service';
 
