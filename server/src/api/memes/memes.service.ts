@@ -81,9 +81,9 @@ export class MemesService {
 
     const axios = require('axios');
 
-    // 准备提示词（极简版，只保留核心信息）
-    const contentPrompt = `${content}，搞笑卡通图`;
-    const explanationPrompt = `${explanation}，搞笑插画`;
+    // 准备提示词（精简版，明确要求幽默和内容契合）
+    const contentPrompt = `${content}，幽默搞笑，内容契合的卡通图`;
+    const explanationPrompt = `${explanation}，幽默搞笑，内容契合的插画`;
 
     // 并行生成两张图片（使用1K分辨率，速度更快）
     const startTime = Date.now();
