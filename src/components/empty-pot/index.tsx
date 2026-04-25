@@ -7,16 +7,16 @@ interface EmptyPotProps {
 }
 
 export default function EmptyPot({ index = 0 }: EmptyPotProps) {
-  // 随机花盆颜色
+  // 随机花盆颜色（更鲜艳显眼的色调）
   const potColors = [
-    { main: '#FFB6C1', light: '#FFC0CB' }, // 浅粉
-    { main: '#FFD700', light: '#FFEC8B' }, // 金黄
-    { main: '#87CEEB', light: '#B0E0E6' }, // 天蓝
-    { main: '#DDA0DD', light: '#EE82EE' }, // 紫罗兰
-    { main: '#98FB98', light: '#90EE90' }, // 嫩绿
-    { main: '#FFA07A', light: '#FFB347' }, // 浅橙
-    { main: '#E6E6FA', light: '#F0F8FF' }, // 淡紫
-    { main: '#F0E68C', light: '#FFFFE0' }, // 卡其
+    { main: '#FF3366', light: '#FF6B8A' }, // 鲜红
+    { main: '#FFD700', light: '#FFE44D' }, // 金黄
+    { main: '#00BFFF', light: '#33D9FF' }, // 亮蓝
+    { main: '#FF00FF', light: '#FF66FF' }, // 洋红
+    { main: '#00FF7F', light: '#4DFFA3' }, // 鲜绿
+    { main: '#FF6600', light: '#FF9933' }, // 橙色
+    { main: '#9400D3', light: '#C833FF' }, // 紫色
+    { main: '#FF1493', light: '#FF5CB8' }, // 深粉
   ]
   const potColor = potColors[index % potColors.length]
 
