@@ -203,7 +203,7 @@ export default function Detail() {
         {meme.explanation && (
           <View className="bg-white px-4 py-4 mb-3 text-center">
             <Text
-              className="block text-2xl font-bold leading-relaxed"
+              className="block text-4xl font-bold leading-relaxed"
               style={{
                 animation: 'bounce 1.5s ease-in-out infinite',
                 backgroundImage: 'linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff)',
