@@ -1,4 +1,4 @@
-import { View, Image } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 import './flower-meme.css'
 
 interface FlowerMemeProps {
@@ -63,6 +63,11 @@ export default function FlowerMeme({ meme, onClick, index = 0 }: FlowerMemeProps
             className="meme-image"
           />
         </View>
+      </View>
+
+      {/* 梗名字 */}
+      <View className="meme-name">
+        <Text className="meme-name-text">{meme.content}</Text>
       </View>
     </View>
   )

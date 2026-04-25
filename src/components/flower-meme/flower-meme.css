@@ -1,8 +1,8 @@
 /* 花朵容器 */
 .flower-container {
   position: relative;
-  width: 170px;
-  height: 240px;
+  width: 180px;
+  height: 320px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,9 +56,9 @@
 .pot {
   position: absolute;
   bottom: 0;
-  width: 110px;
-  height: 85px;
-  border-radius: 0 0 35px 35px;
+  width: 120px;
+  height: 95px;
+  border-radius: 0 0 40px 40px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -75,10 +75,10 @@
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 2px, transparent 2px);
-  background-size: 10px 10px;
+  background-size: 12px 12px;
   border-radius: 10px;
 }
 
@@ -87,22 +87,22 @@
   content: '';
   position: absolute;
   bottom: 8px;
-  left: 20px;
-  width: 8px;
-  height: 8px;
+  left: 22px;
+  width: 9px;
+  height: 9px;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  box-shadow: 12px 0 0 rgba(255, 255, 255, 0.6), 24px 8px 0 rgba(255, 255, 255, 0.6), 36px 0 0 rgba(255, 255, 255, 0.6), 48px 8px 0 rgba(255, 255, 255, 0.6);
+  box-shadow: 13px 0 0 rgba(255, 255, 255, 0.6), 26px 10px 0 rgba(255, 255, 255, 0.6), 39px 0 0 rgba(255, 255, 255, 0.6), 52px 10px 0 rgba(255, 255, 255, 0.6);
   animation: sparkle 2s ease-in-out infinite;
 }
 
 /* 花盆边缘 */
 .pot-rim {
   position: absolute;
-  top: -12px;
-  width: 125px;
-  height: 18px;
-  border-radius: 9px;
+  top: -14px;
+  width: 135px;
+  height: 20px;
+  border-radius: 10px;
   z-index: 3;
   background: linear-gradient(135deg, var(--pot-color-light) 0%, var(--pot-color) 100%);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
@@ -118,18 +118,18 @@
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.4) 3px, transparent 3px);
-  background-size: 15px 15px;
-  border-radius: 9px;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.4) 4px, transparent 4px);
+  background-size: 18px 18px;
+  border-radius: 10px;
 }
 
 /* 花盆口 */
 .pot-opening {
   position: absolute;
   top: 0;
-  width: 95px;
-  height: 15px;
-  border-radius: 7.5px;
+  width: 105px;
+  height: 18px;
+  border-radius: 9px;
   opacity: 0.6;
   background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.1) 0%, transparent 70%);
 }
@@ -137,19 +137,19 @@
 /* 花茎 */
 .stem {
   position: absolute;
-  bottom: 55px;
-  width: 12px;
-  height: 125px;
+  bottom: 60px;
+  width: 14px;
+  height: 140px;
   background: linear-gradient(to top, #228B22, #32CD32);
-  border-radius: 6px;
+  border-radius: 7px;
   z-index: 1;
 }
 
 /* 叶子 */
 .leaf {
   position: absolute;
-  width: 40px;
-  height: 22px;
+  width: 45px;
+  height: 25px;
   background: linear-gradient(135deg, #32CD32 0%, #228B22 100%);
   border-radius: 50% 0 50% 50%;
   z-index: 1;
@@ -157,14 +157,14 @@
 }
 
 .leaf-left {
-  bottom: 80px;
-  left: -35px;
+  bottom: 90px;
+  left: -40px;
   transform: rotate(-35deg);
 }
 
 .leaf-right {
-  bottom: 70px;
-  right: -35px;
+  bottom: 80px;
+  right: -40px;
   transform: rotate(35deg) scaleX(-1);
 }
 
@@ -172,8 +172,8 @@
 .flower-head {
   position: absolute;
   top: 0;
-  width: 150px;
-  height: 150px;
+  width: 160px;
+  height: 160px;
   animation: sway 3s ease-in-out infinite;
   z-index: 3;
 }
@@ -183,8 +183,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 150px;
-  height: 150px;
+  width: 160px;
+  height: 160px;
   transform: translate(-50%, -50%);
   display: flex;
   justify-content: center;
@@ -194,8 +194,8 @@
 /* 单个花瓣 */
 .petal {
   position: absolute;
-  width: 28px;
-  height: 55px;
+  width: 32px;
+  height: 62px;
   border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
   opacity: 0.7;
   transform-origin: center bottom;
@@ -207,12 +207,12 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 105px;
-  height: 105px;
+  width: 115px;
+  height: 115px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 6px solid #FFD700;
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.6), 0 6px 12px rgba(0, 0, 0, 0.2);
+  border: 7px solid #FFD700;
+  box-shadow: 0 0 35px rgba(255, 215, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   background: #fff;
   z-index: 4;
@@ -223,4 +223,33 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
+}
+
+/* 梗名字容器 */
+.meme-name {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  text-align: center;
+  z-index: 5;
+}
+
+/* 梗名字文本 */
+.meme-name-text {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5), 0 0 8px rgba(0, 0, 0, 0.3);
+  line-height: 1.4;
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  padding: 0 8px;
 }
