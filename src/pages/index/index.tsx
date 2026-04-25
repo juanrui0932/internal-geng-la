@@ -70,7 +70,7 @@ export default function Index() {
 
       {/* 标题 */}
       <View className="garden-title">
-        <Text className="garden-title-text">🌸 梗的花园 🌸</Text>
+        <Text className="garden-title-text">🌸 梗的发园 🌸</Text>
       </View>
 
       {/* 花朵网格 */}
