@@ -8,18 +8,27 @@ interface FlowerMemeProps {
 }
 
 export default function FlowerMeme({ meme, onClick, index = 0 }: FlowerMemeProps) {
-  // 随机花盆颜色
-  const potColors = ['#FF6B6B', '#Feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#00d2d3', '#5f27cd']
+  // 随机花盆颜色（更柔和的可爱色调）
+  const potColors = [
+    { main: '#FFB6C1', light: '#FFC0CB' }, // 浅粉
+    { main: '#FFD700', light: '#FFEC8B' }, // 金黄
+    { main: '#87CEEB', light: '#B0E0E6' }, // 天蓝
+    { main: '#DDA0DD', light: '#EE82EE' }, // 紫罗兰
+    { main: '#98FB98', light: '#90EE90' }, // 嫩绿
+    { main: '#FFA07A', light: '#FFB347' }, // 浅橙
+    { main: '#E6E6FA', light: '#F0F8FF' }, // 淡紫
+    { main: '#F0E68C', light: '#FFFFE0' }, // 卡其
+  ]
   const potColor = potColors[index % potColors.length]
 
   return (
-    <View className="flower-container" onClick={onClick}>
+    <View className="flower-container" style={{ '--pot-color': potColor.main, '--pot-color-light': potColor.light } as React.CSSProperties} onClick={onClick}>
       {/* 花盆 */}
-      <View className="pot" style={{ backgroundColor: potColor }}>
+      <View className="pot">
         {/* 花盆边缘 */}
-        <View className="pot-rim" style={{ backgroundColor: potColor }} />
+        <View className="pot-rim" />
         {/* 花盆口 */}
-        <View className="pot-opening" style={{ backgroundColor: `${potColor}99` }} />
+        <View className="pot-opening" />
       </View>
 
       {/* 花茎 */}
@@ -40,7 +49,7 @@ export default function FlowerMeme({ meme, onClick, index = 0 }: FlowerMemeProps
               className="petal"
               style={{
                 transform: `rotate(${i * 45}deg)`,
-                backgroundColor: potColors[(index + i) % potColors.length],
+                backgroundColor: potColors[(index + i) % potColors.length].main,
               }}
             />
           ))}

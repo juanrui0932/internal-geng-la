@@ -40,17 +40,60 @@
   }
 }
 
+/* 闪烁动画 */
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
 /* 花盆 */
 .pot {
   position: absolute;
   bottom: 0;
   width: 110px;
   height: 85px;
-  border-radius: 0 0 30px 30px;
+  border-radius: 0 0 35px 35px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   z-index: 2;
+  background: linear-gradient(135deg, var(--pot-color) 0%, var(--pot-color-light) 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 -10px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* 可爱的装饰图案 */
+.pot::before {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 2px, transparent 2px);
+  background-size: 10px 10px;
+  border-radius: 10px;
+}
+
+/* 可爱的小圆点装饰 */
+.pot::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 20px;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  box-shadow: 12px 0 0 rgba(255, 255, 255, 0.6), 24px 8px 0 rgba(255, 255, 255, 0.6), 36px 0 0 rgba(255, 255, 255, 0.6), 48px 8px 0 rgba(255, 255, 255, 0.6);
+  animation: sparkle 2s ease-in-out infinite;
 }
 
 /* 花盆边缘 */
@@ -59,8 +102,25 @@
   top: -12px;
   width: 125px;
   height: 18px;
-  border-radius: 6px;
+  border-radius: 9px;
   z-index: 3;
+  background: linear-gradient(135deg, var(--pot-color-light) 0%, var(--pot-color) 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* 可爱的装饰点 */
+.pot-rim::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.4) 3px, transparent 3px);
+  background-size: 15px 15px;
+  border-radius: 9px;
 }
 
 /* 花盆口 */
@@ -69,8 +129,9 @@
   top: 0;
   width: 95px;
   height: 15px;
-  border-radius: 6px;
-  opacity: 0.5;
+  border-radius: 7.5px;
+  opacity: 0.6;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.1) 0%, transparent 70%);
 }
 
 /* 花茎 */
@@ -89,21 +150,22 @@
   position: absolute;
   width: 40px;
   height: 22px;
-  background: linear-gradient(135deg, #228B22, #32CD32);
-  border-radius: 0 22px 22px 22px;
+  background: linear-gradient(135deg, #32CD32 0%, #228B22 100%);
+  border-radius: 50% 0 50% 50%;
   z-index: 1;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .leaf-left {
   bottom: 80px;
   left: -35px;
-  transform: rotate(-30deg);
+  transform: rotate(-35deg);
 }
 
 .leaf-right {
   bottom: 70px;
   right: -35px;
-  transform: rotate(30deg) scaleX(-1);
+  transform: rotate(35deg) scaleX(-1);
 }
 
 /* 花头 */
@@ -134,9 +196,10 @@
   position: absolute;
   width: 28px;
   height: 55px;
-  border-radius: 50%;
-  opacity: 0.6;
+  border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+  opacity: 0.7;
   transform-origin: center bottom;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* 花心（梗图） */
