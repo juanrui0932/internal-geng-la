@@ -35,7 +35,7 @@ export const memes = pgTable(
 		image_url: varchar("image_url", { length: 1000 }), // 配图的可访问 URL（兼容字段，现在指向梗名称图片）
 		content_image_key: varchar("content_image_key", { length: 500 }), // 梗名称图片的对象存储 key（必填）
 		content_image_url: varchar("content_image_url", { length: 1000 }), // 梗名称图片的可访问 URL
-		explanation: text("explanation"), // 解释（可选）
+		explanation: text("explanation").notNull(), // 解释（必填）
 		explanation_image_key: varchar("explanation_image_key", { length: 500 }), // 梗解释图片的对象存储 key（可选）
 		explanation_image_url: varchar("explanation_image_url", { length: 1000 }), // 梗解释图片的可访问 URL
 		is_ai_generated: boolean("is_ai_generated").default(false).notNull(), // 是否 AI 生成

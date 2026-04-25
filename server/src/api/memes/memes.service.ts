@@ -72,7 +72,7 @@ export class MemesService {
   }
 
   // AI 生成图片（生成两张：梗名称图片和梗解释图片）
-  async generateImages(content: string, explanation?: string) {
+  async generateImages(content: string, explanation: string) {
     console.log('AI生成两张图片，content:', content, 'explanation:', explanation);
 
     // 生成梗名称图片
@@ -116,16 +116,8 @@ export class MemesService {
       expireTime: 86400 * 30,
     });
 
-    const result = {
-      content_image_url: contentSignedUrl,
-      content_image_key: contentFileKey,
-      explanation_image_url: null as string | null,
-      explanation_image_key: null as string | null,
-    };
-
-    // 如果有梗解释，生成梗解释图片
-    if (explanation && explanation.trim()) {
-      const explanationPrompt = `设计一个"玩内部梗啦！"风格的梗解释插画，主题是"${explanation}"。
+    // 生成梗解释图片（必填）
+    const explanationPrompt = `设计一个"玩内部梗啦！"风格的梗解释插画，主题是"${explanation}"。
 画面要求：
 1. 场景化插画：用具体场景来展现梗的含义和情境
 2. 夸张搞笑的卡通人物或动物，表情生动有趣
@@ -135,37 +127,40 @@ export class MemesService {
 6. 风格统一：扁平化插画，线条简洁，色彩饱和度高
 7. 可以加入文字气泡、对话框等元素，增强叙事性`;
 
-      const explanationResponse = await this.imageClient.generate({
-        prompt: explanationPrompt,
-        size: '2K',
-        watermark: false,
-      });
+    const explanationResponse = await this.imageClient.generate({
+      prompt: explanationPrompt,
+      size: '2K',
+      watermark: false,
+    });
 
-      const explanationHelper = this.imageClient.getResponseHelper(explanationResponse);
+    const explanationHelper = this.imageClient.getResponseHelper(explanationResponse);
 
-      if (explanationHelper.success && explanationHelper.imageUrls && explanationHelper.imageUrls.length > 0) {
-        const explanationImageUrl = explanationHelper.imageUrls[0];
-        console.log('AI生成梗解释图片成功，imageUrl:', explanationImageUrl);
-
-        const explanationImageBuffer = await axios.get(explanationImageUrl, { responseType: 'arraybuffer' });
-
-        const explanationFileKey = await this.storage.uploadFile({
-          fileContent: Buffer.from(explanationImageBuffer.data),
-          fileName: `memes/ai_explanation_${Date.now()}.png`,
-          contentType: 'image/png',
-        });
-
-        const explanationSignedUrl = await this.storage.generatePresignedUrl({
-          key: explanationFileKey,
-          expireTime: 86400 * 30,
-        });
-
-        result.explanation_image_url = explanationSignedUrl;
-        result.explanation_image_key = explanationFileKey;
-      }
+    if (!explanationHelper.success || !explanationHelper.imageUrls || explanationHelper.imageUrls.length === 0) {
+      throw new Error(explanationHelper.errorMessages?.join(', ') || 'AI生成梗解释图片失败');
     }
 
-    return result;
+    const explanationImageUrl = explanationHelper.imageUrls[0];
+    console.log('AI生成梗解释图片成功，imageUrl:', explanationImageUrl);
+
+    const explanationImageBuffer = await axios.get(explanationImageUrl, { responseType: 'arraybuffer' });
+
+    const explanationFileKey = await this.storage.uploadFile({
+      fileContent: Buffer.from(explanationImageBuffer.data),
+      fileName: `memes/ai_explanation_${Date.now()}.png`,
+      contentType: 'image/png',
+    });
+
+    const explanationSignedUrl = await this.storage.generatePresignedUrl({
+      key: explanationFileKey,
+      expireTime: 86400 * 30,
+    });
+
+    return {
+      content_image_url: contentSignedUrl,
+      content_image_key: contentFileKey,
+      explanation_image_url: explanationSignedUrl,
+      explanation_image_key: explanationFileKey,
+    };
   }
 
   // 创建梗
@@ -173,7 +168,7 @@ export class MemesService {
     content: string;
     content_image_url: string;
     content_image_key: string;
-    explanation?: string;
+    explanation: string;
     explanation_image_url?: string | null;
     explanation_image_key?: string | null;
     is_ai_generated: boolean;

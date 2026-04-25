@@ -49,7 +49,7 @@ export class MemesController {
   // AI 生成图片（生成两张：梗名称图片和梗解释图片）
   @Post('generate-images')
   @HttpCode(200)
-  async generateImages(@Body() body: { content: string; explanation?: string }) {
+  async generateImages(@Body() body: { content: string; explanation: string }) {
     console.log('收到AI生成图片请求，content:', body.content, 'explanation:', body.explanation);
 
     const result = await this.memesService.generateImages(body.content, body.explanation);
@@ -67,7 +67,7 @@ export class MemesController {
     content: string;
     content_image_url: string;
     content_image_key: string;
-    explanation?: string;
+    explanation: string;
     explanation_image_url?: string | null;
     explanation_image_key?: string | null;
     is_ai_generated: boolean;

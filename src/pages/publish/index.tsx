@@ -64,6 +64,11 @@ export default function Publish() {
       return
     }
 
+    if (!explanation) {
+      Taro.showToast({ title: '请先输入梗解释', icon: 'none' })
+      return
+    }
+
     try {
       setIsGenerating(true)
       const res = await Network.request({
@@ -71,7 +76,7 @@ export default function Publish() {
         method: 'POST',
         data: {
           content,
-          explanation: explanation || undefined
+          explanation
         }
       })
       console.log('AI生成图片响应:', res.data)
@@ -100,6 +105,11 @@ export default function Publish() {
   const handlePublish = async () => {
     if (!content) {
       Taro.showToast({ title: '请输入梗内容', icon: 'none' })
+      return
+    }
+
+    if (!explanation) {
+      Taro.showToast({ title: '请输入梗解释', icon: 'none' })
       return
     }
 
@@ -221,7 +231,7 @@ export default function Publish() {
         <Card className="mb-4">
           <CardContent className="p-4">
             <Text className="block text-sm font-semibold text-gray-700 mb-3">
-              解释（可选）
+              解释（必填）
             </Text>
             <View className="bg-gray-50 rounded-xl px-4 py-3">
               <Textarea
@@ -274,7 +284,7 @@ export default function Publish() {
         <Card className="mb-6">
           <CardContent className="p-4">
             <Text className="block text-sm font-semibold text-gray-700 mb-3">
-              梗解释图片（可选，用于详情页）
+              梗解释图片（必填，用于详情页）
             </Text>
 
             {explanationImageUrl ? (
