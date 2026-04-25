@@ -66,7 +66,7 @@ export class MemesService {
     console.log('AI生成图片，prompt:', prompt);
 
     const response = await this.imageClient.generate({
-      prompt: `"${prompt}" - 搞笑的梗图，有趣的表情包风格，适合社交分享`,
+      prompt: `${prompt}，诙谐幽默的表情包风格，夸张搞笑的卡通人物或动物表情，生动有趣的场景插画，充满喜剧效果的构图，色彩鲜艳明快，适合网络传播和社交分享，让人一看就忍不住笑出来`,
       size: '2K',
       watermark: false,
     });
