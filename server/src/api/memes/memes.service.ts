@@ -81,12 +81,11 @@ export class MemesService {
 
     const axios = require('axios');
 
-    // 准备提示词（精简版，避免过长导致AI理解偏差）
-    const contentPrompt = `"玩内部梗啦！"风格梗图，主题"${content}"。表情包风格，夸张搞笑卡通表情，构图喜剧效果，色彩鲜艳，网络传播，幽默风趣`;
+    // 准备提示词（极简版，只保留核心信息）
+    const contentPrompt = `${content}，搞笑卡通图`;
+    const explanationPrompt = `${explanation}，搞笑插画`;
 
-    const explanationPrompt = `"玩内部梗啦！"风格梗解释插画，主题"${explanation}"。场景化展现梗的含义，夸张搞笑卡通人物，戏剧性构图，色彩鲜艳，叙事性强，与梗名称图片呼应`;
-
-    // 并行生成两张图片（使用相同的尺寸和参数）
+    // 并行生成两张图片
     const startTime = Date.now();
     console.log('开始并行生成两张图片...');
 
@@ -94,13 +93,11 @@ export class MemesService {
       this.imageClient.generate({
         prompt: contentPrompt,
         size: '2K',
-        aspect_ratio: '1:1',  // 统一使用 1:1 宽高比
         watermark: false,
       }),
       this.imageClient.generate({
         prompt: explanationPrompt,
         size: '2K',
-        aspect_ratio: '1:1',  // 统一使用 1:1 宽高比
         watermark: false,
       }),
     ]);
