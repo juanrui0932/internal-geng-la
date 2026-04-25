@@ -81,28 +81,12 @@ export class MemesService {
 
     const axios = require('axios');
 
-    // 准备提示词
-    const contentPrompt = `设计一个"玩内部梗啦！"风格的梗图，主题是"${content}"。
-画面要求：
-1. 表情包风格：夸张搞笑的卡通人物表情，生动有趣
-2. 构图充满喜剧效果，色彩鲜艳明快
-3. 可以包含梗的文字或符号元素，增加识别度
-4. 适合网络传播和社交分享
-5. 让人一看就明白这个梗的含义，同时忍不住笑出来
-6. 风格统一：扁平化插画，线条简洁，色彩饱和度高
-7. 可以加入emoji、表情符号等现代网络元素`;
+    // 准备提示词（精简版，避免过长导致AI理解偏差）
+    const contentPrompt = `"玩内部梗啦！"风格梗图，主题"${content}"。表情包风格，夸张搞笑卡通表情，构图喜剧效果，色彩鲜艳，网络传播，幽默风趣`;
 
-    const explanationPrompt = `设计一个"玩内部梗啦！"风格的梗解释插画，主题是"${explanation}"。
-画面要求：
-1. 场景化插画：用具体场景来展现梗的含义和情境
-2. 夸张搞笑的卡通人物或动物，表情生动有趣
-3. 构图充满戏剧性和喜剧效果，色彩鲜艳明快
-4. 通过画面讲好梗的故事，让观众理解梗的来龙去脉
-5. 适合在详情页展示，与梗名称图片形成呼应
-6. 风格统一：扁平化插画，线条简洁，色彩饱和度高
-7. 可以加入文字气泡、对话框等元素，增强叙事性`;
+    const explanationPrompt = `"玩内部梗啦！"风格梗解释插画，主题"${explanation}"。场景化展现梗的含义，夸张搞笑卡通人物，戏剧性构图，色彩鲜艳，叙事性强，与梗名称图片呼应`;
 
-    // 并行生成两张图片
+    // 并行生成两张图片（使用相同的尺寸和参数）
     const startTime = Date.now();
     console.log('开始并行生成两张图片...');
 
@@ -110,11 +94,13 @@ export class MemesService {
       this.imageClient.generate({
         prompt: contentPrompt,
         size: '2K',
+        aspect_ratio: '1:1',  // 统一使用 1:1 宽高比
         watermark: false,
       }),
       this.imageClient.generate({
         prompt: explanationPrompt,
         size: '2K',
+        aspect_ratio: '1:1',  // 统一使用 1:1 宽高比
         watermark: false,
       }),
     ]);
