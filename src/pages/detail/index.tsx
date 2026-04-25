@@ -199,10 +199,21 @@ export default function Detail() {
           />
         </View>
 
-        {/* 梗解释（放在图片下面，放大加粗，特殊字体） */}
+        {/* 梗解释（放在图片下面，放大加粗，彩色跳动动画） */}
         {meme.explanation && (
-          <View className="bg-white px-4 py-4 mb-3">
-            <Text className="block text-2xl font-serif font-bold text-gray-900 leading-relaxed">
+          <View className="bg-white px-4 py-4 mb-3 text-center">
+            <Text
+              className="block text-2xl font-bold leading-relaxed"
+              style={{
+                animation: 'bounce 1.5s ease-in-out infinite',
+                backgroundImage: 'linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff)',
+                backgroundSize: '400% 400%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >
               {meme.explanation}
             </Text>
           </View>
