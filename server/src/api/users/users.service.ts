@@ -24,7 +24,8 @@ export class UsersService {
   async generateAvatar(nickname: string) {
     console.log('根据昵称生成头像:', nickname);
 
-    const prompt = `设计一个"玩内部梗啦！"风格的卡通头像，昵称是"${nickname}"。
+    try {
+      const prompt = `设计一个"玩内部梗啦！"风格的卡通头像，昵称是"${nickname}"。
 画面要求：
 1. 卡通风格：夸张搞笑的Q版人物或动物形象
 2. 个性化：根据昵称特点设计独特的形象特征
@@ -36,38 +37,42 @@ export class UsersService {
 8. 可以加入与昵称相关的道具、配饰或背景元素
 9. 整体风格统一，与梗图风格保持一致`;
 
-    const response = await this.imageClient.generate({
-      prompt: prompt,
-      size: '2K',
-      watermark: false,
-    });
+      const response = await this.imageClient.generate({
+        prompt: prompt,
+        size: '2K',
+        watermark: false,
+      });
 
-    const helper = this.imageClient.getResponseHelper(response);
+      const helper = this.imageClient.getResponseHelper(response);
 
-    if (!helper.success || !helper.imageUrls || helper.imageUrls.length === 0) {
-      console.error('AI生成头像失败:', helper.errorMessages);
-      return null; // 生成失败返回 null，不影响用户创建
+      if (!helper.success || !helper.imageUrls || helper.imageUrls.length === 0) {
+        console.error('AI生成头像失败:', helper.errorMessages);
+        return null; // 生成失败返回 null，不影响用户创建
+      }
+
+      const imageUrl = helper.imageUrls[0];
+      console.log('AI生成头像成功，imageUrl:', imageUrl);
+
+      // 将 AI 生成的头像上传到对象存储
+      const axios = require('axios');
+      const imageBuffer = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+
+      const fileKey = await this.storage.uploadFile({
+        fileContent: Buffer.from(imageBuffer.data),
+        fileName: `avatars/${Date.now()}_${nickname}.png`,
+        contentType: 'image/png',
+      });
+
+      const signedUrl = await this.storage.generatePresignedUrl({
+        key: fileKey,
+        expireTime: 86400 * 365, // 1年有效期
+      });
+
+      return { avatar_url: signedUrl };
+    } catch (error) {
+      console.error('生成头像过程中发生异常:', error);
+      return null; // 任何异常都返回 null，不影响用户创建
     }
-
-    const imageUrl = helper.imageUrls[0];
-    console.log('AI生成头像成功，imageUrl:', imageUrl);
-
-    // 将 AI 生成的头像上传到对象存储
-    const axios = require('axios');
-    const imageBuffer = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-
-    const fileKey = await this.storage.uploadFile({
-      fileContent: Buffer.from(imageBuffer.data),
-      fileName: `avatars/${Date.now()}_${nickname}.png`,
-      contentType: 'image/png',
-    });
-
-    const signedUrl = await this.storage.generatePresignedUrl({
-      key: fileKey,
-      expireTime: 86400 * 365, // 1年有效期
-    });
-
-    return { avatar_url: signedUrl };
   }
 
   // 创建或登录用户
