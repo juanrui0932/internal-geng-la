@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { getSupabaseClient } from '@/storage/database/supabase-client';
 import { S3Storage } from 'coze-coding-dev-sdk';
 import { ImageGenerationClient, Config } from 'coze-coding-dev-sdk';
+import { UsersService } from '../users/users.service';
 
 interface UploadedFile {
   fieldname: string;
@@ -19,7 +20,10 @@ export class MemesService {
   private imageClient: ImageGenerationClient;
   private supabase = getSupabaseClient();
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private usersService: UsersService
+  ) {
     this.storage = new S3Storage({
       bucketName: this.configService.get('COZE_BUCKET_NAME'),
       region: 'cn-beijing',
@@ -198,6 +202,20 @@ export class MemesService {
     user_nickname: string;
   }) {
     console.log('创建梗:', data);
+
+    // 检查用户是否存在，如果不存在则创建
+    const { data: user } = await this.supabase
+      .from('users')
+      .select('*')
+      .eq('id', data.user_id)
+      .single();
+
+    if (!user) {
+      console.log('用户不存在，重新创建用户:', data.user_nickname);
+      const newUser = await this.usersService.createUser({ nickname: data.user_nickname });
+      // 更新 user_id 为新用户的 id
+      data.user_id = newUser.id;
+    }
 
     const { data: meme, error } = await this.supabase
       .from('memes')
