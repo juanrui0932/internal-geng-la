@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { Heart, MessageCircle, ArrowLeft, Send } from 'lucide-react-taro'
+import { Heart, MessageCircle, ArrowLeft, Send, Trash2 } from 'lucide-react-taro'
 import Taro from '@tarojs/taro'
 import { Network } from '@/network'
 import './index.css'
@@ -20,6 +20,7 @@ interface MemeDetail {
   like_count: number
   comment_count: number
   is_ai_generated: boolean
+  user_id?: string
   user_nickname?: string
   user_avatar_url?: string
   created_at: string
@@ -39,6 +40,7 @@ export default function Detail() {
   const [commentText, setCommentText] = useState('')
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [deleted, setDeleted] = useState(false)
 
   // 获取路由参数
   const router = Taro.useRouter()
@@ -99,6 +101,44 @@ export default function Detail() {
       console.error('点赞失败:', error)
       Taro.showToast({ title: '点赞失败', icon: 'none' })
     }
+  }
+
+  const handleDeleteMeme = async () => {
+    if (!meme) return
+
+    // 获取用户信息
+    const userInfo = Taro.getStorageSync('userInfo')
+    if (!userInfo || !userInfo.id) {
+      Taro.showToast({ title: '请先设置昵称', icon: 'none' })
+      return
+    }
+
+    // 确认删除
+    Taro.showModal({
+      title: '确认删除',
+      content: '确定要删除这个梗吗？删除后无法恢复。',
+      success: async (res) => {
+        if (res.confirm) {
+          try {
+            const deleteRes = await Network.request({
+              url: `/api/memes/${meme.id}`,
+              method: 'DELETE',
+              data: { user_id: userInfo.id }
+            })
+
+            if (deleteRes.data && deleteRes.data.code === 200) {
+              setDeleted(true)
+              Taro.showToast({ title: '删除成功', icon: 'success' })
+            } else {
+              Taro.showToast({ title: '删除失败', icon: 'none' })
+            }
+          } catch (error) {
+            console.error('删除失败:', error)
+            Taro.showToast({ title: '删除失败，请重试', icon: 'none' })
+          }
+        }
+      }
+    })
   }
 
   const handleSubmitComment = async () => {
@@ -163,8 +203,56 @@ export default function Detail() {
     loadMemeDetail()
   })
 
+  // 获取当前用户信息
+  const userInfo = Taro.getStorageSync('userInfo')
+  const isOwnMeme = userInfo && meme && userInfo.id === meme.user_id
+
   if (loading) {
+    // 检查是否已删除
+  if (deleted) {
     return (
+      <View className="min-h-screen bg-gradient-to-b from-blue-100 to-green-100 flex flex-col items-center justify-center px-8">
+        {/* 花死了的视觉效果 */}
+        <View className="relative mb-8">
+          {/* 花茎（枯萎） */}
+          <View className="absolute left-1/2 top-20 w-3 h-32 bg-yellow-700 transform -translate-x-1/2 rounded-full" style={{ transform: 'rotate(10deg) translateX(-50%)' }} />
+
+          {/* 叶子（枯萎） */}
+          <View className="absolute left-1/2 top-24 w-8 h-4 bg-yellow-600 transform -translate-x-1/2 rounded-full" style={{ transform: 'rotate(-30deg) translateX(-50%)' }} />
+          <View className="absolute left-1/2 top-32 w-8 h-4 bg-yellow-600 transform -translate-x-1/2 rounded-full" style={{ transform: 'rotate(30deg) translateX(-50%)' }} />
+
+          {/* 花头（枯萎） */}
+          <View className="w-24 h-24 rounded-full bg-yellow-800 flex items-center justify-center mb-6 opacity-60">
+            <Text className="block text-4xl">😢</Text>
+          </View>
+
+          {/* 花瓣掉落 */}
+          <View className="absolute -top-8 left-0 text-2xl animate-bounce">🥀</View>
+          <View className="absolute -top-4 right-0 text-2xl animate-bounce" style={{ animationDelay: '0.2s' }}>🥀</View>
+          <View className="absolute top-4 -left-8 text-xl animate-bounce" style={{ animationDelay: '0.4s' }}>🥀</View>
+          <View className="absolute top-4 -right-8 text-xl animate-bounce" style={{ animationDelay: '0.6s' }}>🥀</View>
+        </View>
+
+        {/* 文字提示 */}
+        <Text className="block text-2xl font-bold text-gray-700 mb-3 text-center">
+          🌸 梗已删除 🌸
+        </Text>
+        <Text className="block text-gray-500 text-center mb-8">
+          这朵花已经凋零了...
+        </Text>
+
+        {/* 返回按钮 */}
+        <Button
+          className="bg-blue-500 text-white px-8"
+          onClick={() => Taro.switchTab({ url: '/pages/index/index' })}
+        >
+          返回梗的发园
+        </Button>
+      </View>
+    )
+  }
+
+  return (
       <View className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Text className="block text-gray-500">加载中...</Text>
       </View>
@@ -190,6 +278,15 @@ export default function Detail() {
           <ArrowLeft size={18} color="#374151" />
         </View>
         <Text className="block text-base font-semibold text-gray-900 ml-3 flex-1">梗详情</Text>
+        {isOwnMeme && (
+          <View
+            className="flex items-center justify-center px-3 py-1 bg-red-100 rounded-full"
+            onClick={handleDeleteMeme}
+          >
+            <Trash2 size={16} color="#EF4444" />
+            <Text className="block text-sm text-red-500 ml-1">删除</Text>
+          </View>
+        )}
       </View>
 
       <ScrollView scrollY className="flex-1">

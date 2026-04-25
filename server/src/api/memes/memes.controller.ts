@@ -84,6 +84,20 @@ export class MemesController {
     };
   }
 
+  // 删除梗
+  @Delete(':id')
+  @HttpCode(200)
+  async deleteMeme(@Param('id') id: string, @Body() body: { user_id: string }) {
+    console.log('收到删除梗请求:', id, '用户:', body.user_id);
+
+    const result = await this.memesService.deleteMeme(id, body.user_id);
+    return {
+      code: 200,
+      msg: 'success',
+      data: result,
+    };
+  }
+
   // 点赞
   @Post(':id/like')
   @HttpCode(200)

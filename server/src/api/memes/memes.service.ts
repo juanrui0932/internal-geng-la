@@ -214,6 +214,36 @@ export class MemesService {
     return meme;
   }
 
+  // 删除梗
+  async deleteMeme(id: string, userId: string) {
+    console.log('删除梗:', id, '用户:', userId);
+
+    // 检查梗是否存在
+    const { data: meme, error: fetchError } = await this.supabase
+      .from('memes')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !meme) {
+      throw new Error('梗不存在');
+    }
+
+    // 验证是否为梗的发布者
+    if (meme.user_id !== userId) {
+      throw new Error('无权删除此梗');
+    }
+
+    // 删除梗
+    const { error: deleteError } = await this.supabase
+      .from('memes')
+      .delete()
+      .eq('id', id);
+
+    if (deleteError) throw new Error(`删除梗失败: ${deleteError.message}`);
+    return { message: '删除成功' };
+  }
+
   // 点赞
   async likeMeme(id: string) {
     console.log('点赞梗:', id);
