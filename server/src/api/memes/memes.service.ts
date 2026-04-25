@@ -85,19 +85,19 @@ export class MemesService {
     const contentPrompt = `${content}，搞笑卡通图`;
     const explanationPrompt = `${explanation}，搞笑插画`;
 
-    // 并行生成两张图片
+    // 并行生成两张图片（使用1K分辨率，速度更快）
     const startTime = Date.now();
     console.log('开始并行生成两张图片...');
 
     const [contentResponse, explanationResponse] = await Promise.all([
       this.imageClient.generate({
         prompt: contentPrompt,
-        size: '2K',
+        size: '1K',
         watermark: false,
       }),
       this.imageClient.generate({
         prompt: explanationPrompt,
-        size: '2K',
+        size: '1K',
         watermark: false,
       }),
     ]);
