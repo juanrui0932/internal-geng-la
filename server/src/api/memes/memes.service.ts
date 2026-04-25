@@ -105,6 +105,8 @@ export class MemesService {
     image_key: string;
     explanation?: string;
     is_ai_generated: boolean;
+    user_id: string;
+    user_nickname: string;
   }) {
     console.log('创建梗:', data);
 

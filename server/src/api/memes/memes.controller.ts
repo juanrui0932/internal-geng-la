@@ -69,6 +69,8 @@ export class MemesController {
     image_key: string;
     explanation?: string;
     is_ai_generated: boolean;
+    user_id: string;
+    user_nickname: string;
   }) {
     console.log('收到创建梗请求:', body);
 

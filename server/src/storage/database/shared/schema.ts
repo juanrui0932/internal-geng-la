@@ -7,11 +7,29 @@ export const healthCheck = pgTable("health_check", {
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow(),
 });
 
+// 用户表
+export const users = pgTable(
+	"users",
+	{
+		id: varchar("id", { length: 36 }).primaryKey().default(sql`gen_random_uuid()`),
+		nickname: varchar("nickname", { length: 50 }).notNull().unique(), // 昵称（必填，唯一）
+		avatar_url: varchar("avatar_url", { length: 1000 }), // 头像 URL
+		bio: text("bio"), // 个人简介
+		created_at: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+		updated_at: timestamp("updated_at", { withTimezone: true, mode: 'string' }),
+	},
+	(table) => [
+		index("users_nickname_idx").on(table.nickname), // 昵称索引
+	]
+);
+
 // 梗表
 export const memes = pgTable(
 	"memes",
 	{
 		id: varchar("id", { length: 36 }).primaryKey().default(sql`gen_random_uuid()`),
+		user_id: varchar("user_id", { length: 36 }).references(() => users.id, { onDelete: "set null" }), // 外键，关联用户表
+		user_nickname: varchar("user_nickname", { length: 50 }), // 上传者昵称（冗余，方便查询）
 		content: text("content").notNull(), // 梗文本（必填）
 		image_key: varchar("image_key", { length: 500 }), // 配图的对象存储 key（必填，可为 AI 生成或用户上传）
 		image_url: varchar("image_url", { length: 1000 }), // 配图的可访问 URL（持久化时优先存 key，此字段用于显示）
@@ -23,6 +41,7 @@ export const memes = pgTable(
 		updated_at: timestamp("updated_at", { withTimezone: true, mode: 'string' }),
 	},
 	(table) => [
+		index("memes_user_id_idx").on(table.user_id), // 外键索引
 		index("memes_created_at_idx").on(table.created_at), // 排序用
 		index("memes_like_count_idx").on(table.like_count), // 热门排序用
 	]
@@ -34,11 +53,14 @@ export const comments = pgTable(
 	{
 		id: varchar("id", { length: 36 }).primaryKey().default(sql`gen_random_uuid()`),
 		meme_id: varchar("meme_id", { length: 36 }).notNull().references(() => memes.id, { onDelete: "cascade" }), // 外键，关联梗表
+		user_id: varchar("user_id", { length: 36 }).references(() => users.id, { onDelete: "set null" }), // 外键，关联用户表
+		user_nickname: varchar("user_nickname", { length: 50 }), // 评论者昵称（冗余，方便查询）
 		content: text("content").notNull(), // 评论内容
 		created_at: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	},
 	(table) => [
 		index("comments_meme_id_idx").on(table.meme_id), // 外键索引
+		index("comments_user_id_idx").on(table.user_id), // 外键索引
 		index("comments_created_at_idx").on(table.created_at), // 排序用
 	]
 );

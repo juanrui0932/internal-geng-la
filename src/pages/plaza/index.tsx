@@ -2,10 +2,9 @@ import { View, Text, Image } from '@tarojs/components'
 import { useState } from 'react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar } from '@/components/ui/avatar'
-import { Heart, MessageCircle } from 'lucide-react-taro'
+import { Heart, MessageCircle, Flame, Sparkles } from 'lucide-react-taro'
 import Taro from '@tarojs/taro'
 import { Network } from '@/network'
 import './index.css'
@@ -22,8 +21,8 @@ interface Meme {
   created_at: string
 }
 
-export default function Index() {
-  const [tabValue, setTabValue] = useState('all')
+export default function Plaza() {
+  const [tabValue, setTabValue] = useState('hot')
   const [memes, setMemes] = useState<Meme[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -34,7 +33,7 @@ export default function Index() {
       const res = await Network.request({
         url: '/api/memes',
         method: 'GET',
-        data: { order: orderBy, limit: 20 }
+        data: { order: orderBy, limit: 30 }
       })
       console.log('获取梗列表响应:', res.data)
       if (res.data && res.data.data) {
@@ -68,30 +67,37 @@ export default function Index() {
     setTabValue(value)
   }
 
-  // Tab 变化时加载对应数据
   useState(() => {
     if (tabValue) {
       loadMemes()
     }
   })
 
-  // 页面加载时获取数据
   Taro.useDidShow(() => {
     loadMemes()
   })
 
   return (
     <View className="min-h-screen bg-gray-50">
+      {/* 头部标题 */}
+      <View className="bg-white px-4 py-4 border-b border-gray-200">
+        <Text className="block text-2xl font-bold text-gray-900">梗广场</Text>
+        <Text className="block text-sm text-gray-500 mt-1">发现热门好梗</Text>
+      </View>
+
       <Tabs value={tabValue} onValueChange={handleTabChange}>
         <TabsList className="w-full bg-white border-b border-gray-200">
-          <TabsTrigger value="all" className="flex-1">
-            <Text className="block">全部</Text>
-          </TabsTrigger>
           <TabsTrigger value="hot" className="flex-1">
-            <Text className="block">热门</Text>
+            <View className="flex items-center justify-center gap-1">
+              <Flame size={16} color="#f97316" />
+              <Text className="block">热门</Text>
+            </View>
           </TabsTrigger>
           <TabsTrigger value="latest" className="flex-1">
-            <Text className="block">最新</Text>
+            <View className="flex items-center justify-center gap-1">
+              <Sparkles size={16} color="#3b82f6" />
+              <Text className="block">最新</Text>
+            </View>
           </TabsTrigger>
         </TabsList>
 
@@ -104,23 +110,36 @@ export default function Index() {
             ) : memes.length === 0 ? (
               <View className="flex flex-col items-center justify-center py-16">
                 <Text className="block text-gray-500 mb-4">暂无梗内容</Text>
-                <Button
-                  className="bg-orange-500 text-white"
-                  onClick={() => Taro.switchTab({ url: '/pages/publish/index' })}
-                >
-                  发布一个梗
-                </Button>
+                <Text className="block text-sm text-gray-400">快来发布第一个梗吧</Text>
               </View>
             ) : (
-              memes.map((meme) => (
+              memes.map((meme, index) => (
                 <Card key={meme.id} className="mb-4">
                   <CardContent className="p-4">
+                    {/* 排名标签（热门Tab显示前三名） */}
+                    {tabValue === 'hot' && index < 3 && (
+                      <View className="flex items-center justify-between mb-3">
+                        <Badge
+                          className={
+                            index === 0 ? 'bg-red-500' :
+                            index === 1 ? 'bg-orange-500' :
+                            'bg-yellow-500'
+                          }
+                        >
+                          <Text className="block text-xs text-white">
+                            NO.{index + 1}
+                          </Text>
+                        </Badge>
+                      </View>
+                    )}
+
                     <Image
                       src={meme.image_url}
                       mode="widthFix"
                       className="w-full rounded-lg mb-3"
                       lazyLoad
                     />
+
                     <View className="mb-3">
                       <View className="flex items-center mb-2">
                         {meme.user_nickname && (
@@ -135,6 +154,11 @@ export default function Index() {
                             </Text>
                           </View>
                         )}
+                        {meme.is_ai_generated && (
+                          <Badge className="bg-blue-100 text-blue-600">
+                            <Text className="block text-xs">AI生成</Text>
+                          </Badge>
+                        )}
                       </View>
                       <Text className="block text-lg font-semibold text-gray-900 mb-2">
                         {meme.content}
@@ -145,14 +169,8 @@ export default function Index() {
                         </Text>
                       )}
                     </View>
-                    <View className="flex items-center justify-between">
-                      <View className="flex items-center gap-2">
-                        {meme.is_ai_generated && (
-                          <Badge className="bg-blue-100 text-blue-600">
-                            <Text className="block text-xs">AI生成</Text>
-                          </Badge>
-                        )}
-                      </View>
+
+                    <View className="flex items-center justify-between pt-3 border-t border-gray-100">
                       <View className="flex items-center gap-4">
                         <View
                           className="flex items-center gap-1"

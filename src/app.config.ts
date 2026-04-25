@@ -1,6 +1,8 @@
 export default defineAppConfig({
   pages: [
+    'pages/welcome/index',
     'pages/index/index',
+    'pages/plaza/index',
     'pages/publish/index',
     'pages/profile/index'
   ],
@@ -21,6 +23,12 @@ export default defineAppConfig({
         text: '首页',
         iconPath: './assets/tabbar/home.png',
         selectedIconPath: './assets/tabbar/home-active.png',
+      },
+      {
+        pagePath: 'pages/plaza/index',
+        text: '广场',
+        iconPath: './assets/tabbar/flame.png',
+        selectedIconPath: './assets/tabbar/flame-active.png',
       },
       {
         pagePath: 'pages/publish/index',

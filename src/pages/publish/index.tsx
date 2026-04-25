@@ -75,6 +75,13 @@ export default function Publish() {
       return
     }
 
+    // 获取用户信息
+    const userInfo = Taro.getStorageSync('userInfo')
+    if (!userInfo || !userInfo.id) {
+      Taro.showToast({ title: '请先设置昵称', icon: 'none' })
+      return
+    }
+
     try {
       setIsUploading(true)
       let finalImageUrl = imageUrl
@@ -102,7 +109,9 @@ export default function Publish() {
           image_url: finalImageUrl,
           image_key: '',
           explanation: explanation || undefined,
-          is_ai_generated: !imageFile // 没有上传本地图片说明是AI生成的
+          is_ai_generated: !imageFile, // 没有上传本地图片说明是AI生成的
+          user_id: userInfo.id,
+          user_nickname: userInfo.nickname
         }
       })
       console.log('发布梗响应:', res.data)

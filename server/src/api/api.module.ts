@@ -3,6 +3,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { MemesModule } from './memes/memes.module';
 import { CommentsModule } from './comments/comments.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { CommentsModule } from './comments/comments.module';
     }),
     MemesModule,
     CommentsModule,
+    UsersModule,
   ],
 })
 export class ApiModule {}
