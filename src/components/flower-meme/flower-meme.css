@@ -1,0 +1,163 @@
+/* 花朵容器 */
+.flower-container {
+  position: relative;
+  width: 140px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  animation: grow 0.8s ease-out forwards;
+  opacity: 0;
+  transform-origin: bottom center;
+}
+
+/* 花朵悬停摇摆 */
+.flower-container:active {
+  transform: scale(0.95);
+}
+
+/* 生长动画 */
+@keyframes grow {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* 摇摆动画 */
+@keyframes sway {
+  0%, 100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+/* 花盆 */
+.pot {
+  position: absolute;
+  bottom: 0;
+  width: 80px;
+  height: 60px;
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 2;
+}
+
+/* 花盆边缘 */
+.pot-rim {
+  position: absolute;
+  top: -8px;
+  width: 90px;
+  height: 12px;
+  border-radius: 4px;
+  z-index: 3;
+}
+
+/* 花盆口 */
+.pot-opening {
+  position: absolute;
+  top: 0;
+  width: 70px;
+  height: 10px;
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+/* 花茎 */
+.stem {
+  position: absolute;
+  bottom: 40px;
+  width: 8px;
+  height: 100px;
+  background: linear-gradient(to top, #228B22, #32CD32);
+  border-radius: 4px;
+  z-index: 1;
+}
+
+/* 叶子 */
+.leaf {
+  position: absolute;
+  width: 30px;
+  height: 15px;
+  background: linear-gradient(135deg, #228B22, #32CD32);
+  border-radius: 0 15px 15px 15px;
+  z-index: 1;
+}
+
+.leaf-left {
+  bottom: 60px;
+  left: -25px;
+  transform: rotate(-30deg);
+}
+
+.leaf-right {
+  bottom: 50px;
+  right: -25px;
+  transform: rotate(30deg) scaleX(-1);
+}
+
+/* 花头 */
+.flower-head {
+  position: absolute;
+  top: 0;
+  width: 120px;
+  height: 120px;
+  animation: sway 3s ease-in-out infinite;
+  z-index: 3;
+}
+
+/* 外层花瓣 */
+.petals-outer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 单个花瓣 */
+.petal {
+  position: absolute;
+  width: 20px;
+  height: 40px;
+  border-radius: 50%;
+  opacity: 0.6;
+  transform-origin: center bottom;
+}
+
+/* 花心（梗图） */
+.flower-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 4px solid #FFD700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  background: #fff;
+  z-index: 4;
+}
+
+/* 梗图 */
+.meme-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}

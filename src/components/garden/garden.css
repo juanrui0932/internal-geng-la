@@ -1,0 +1,201 @@
+/* 田园花园背景 */
+.garden-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #87CEEB 0%, #B0E0E6 40%, #E0F7FA 60%, #90EE90 80%, #228B22 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 太阳 */
+.sun {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, #FFD700 0%, #FFA500 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 60px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 165, 0, 0.4);
+  z-index: 1;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+/* 太阳光晕动画 */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 60px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 165, 0, 0.4);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 80px rgba(255, 215, 0, 0.9), 0 0 120px rgba(255, 165, 0, 0.5);
+  }
+}
+
+/* 云朵 */
+.cloud {
+  position: fixed;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.8;
+  z-index: 1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cloud-1 {
+  top: 80px;
+  left: 60px;
+  width: 100px;
+  height: 40px;
+  animation: float 15s ease-in-out infinite;
+}
+
+.cloud-1::before,
+.cloud-1::after {
+  content: '';
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.cloud-1::before {
+  top: -20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+}
+
+.cloud-1::after {
+  top: -10px;
+  left: 50px;
+  width: 40px;
+  height: 40px;
+}
+
+.cloud-2 {
+  top: 150px;
+  right: 150px;
+  width: 80px;
+  height: 30px;
+  animation: float 20s ease-in-out infinite reverse;
+}
+
+.cloud-2::before,
+.cloud-2::after {
+  content: '';
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.cloud-2::before {
+  top: -15px;
+  left: 15px;
+  width: 40px;
+  height: 40px;
+}
+
+.cloud-2::after {
+  top: -8px;
+  left: 40px;
+  width: 30px;
+  height: 30px;
+}
+
+/* 云朵飘动动画 */
+@keyframes float {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(30px);
+  }
+}
+
+/* 花园标题 */
+.garden-title {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+  text-align: center;
+}
+
+.garden-title-text {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 215, 0, 0.5);
+  letter-spacing: 2px;
+}
+
+/* 花朵网格 */
+.flowers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 20px;
+  position: relative;
+  z-index: 2;
+  padding-bottom: 100px;
+}
+
+/* 小草装饰 */
+.grass {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to top, #228B22 0%, #32CD32 50%, transparent 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 小草细节 */
+.grass::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 10px,
+    #228B22 10px,
+    #228B22 12px
+  );
+  opacity: 0.3;
+}
+
+/* 花园空状态 */
+.garden-empty {
+  position: relative;
+  z-index: 2;
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.garden-empty-text {
+  font-size: 18px;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  line-height: 2;
+}
+
+/* 加载状态 */
+.garden-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  z-index: 2;
+  position: relative;
+}
+
+.garden-loading-text {
+  font-size: 16px;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
