@@ -46,13 +46,13 @@ export class MemesController {
     };
   }
 
-  // AI 生成图片
-  @Post('generate-image')
+  // AI 生成图片（生成两张：梗名称图片和梗解释图片）
+  @Post('generate-images')
   @HttpCode(200)
-  async generateImage(@Body() body: { prompt: string }) {
-    console.log('收到AI生成图片请求，prompt:', body.prompt);
+  async generateImages(@Body() body: { content: string; explanation?: string }) {
+    console.log('收到AI生成图片请求，content:', body.content, 'explanation:', body.explanation);
 
-    const result = await this.memesService.generateImage(body.prompt);
+    const result = await this.memesService.generateImages(body.content, body.explanation);
     return {
       code: 200,
       msg: 'success',
@@ -65,9 +65,11 @@ export class MemesController {
   @HttpCode(200)
   async createMeme(@Body() body: {
     content: string;
-    image_url: string;
-    image_key: string;
+    content_image_url: string;
+    content_image_key: string;
     explanation?: string;
+    explanation_image_url?: string | null;
+    explanation_image_key?: string | null;
     is_ai_generated: boolean;
     user_id: string;
     user_nickname: string;

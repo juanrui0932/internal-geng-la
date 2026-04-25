@@ -14,7 +14,9 @@ interface MemeDetail {
   id: string
   content: string
   image_url: string
+  content_image_url?: string
   explanation?: string
+  explanation_image_url?: string
   like_count: number
   comment_count: number
   is_ai_generated: boolean
@@ -190,16 +192,27 @@ export default function Detail() {
       </View>
 
       <ScrollView scrollY className="flex-1">
-        {/* 梗图片 */}
+        {/* 梗名称图片 */}
         <View className="bg-white p-4 mb-3">
           <Image
-            src={meme.image_url}
+            src={meme.content_image_url || meme.image_url}
             mode="widthFix"
             className="w-full rounded-xl"
           />
         </View>
 
-        {/* 梗解释（放在图片下面，放大加粗，有趣的字体效果） */}
+        {/* 梗解释图片 */}
+        {meme.explanation_image_url && (
+          <View className="bg-white px-4 pb-4 mb-3">
+            <Image
+              src={meme.explanation_image_url}
+              mode="widthFix"
+              className="w-full rounded-xl"
+            />
+          </View>
+        )}
+
+        {/* 梗解释文字（放在图片下面，放大加粗，有趣的字体效果） */}
         {meme.explanation && (
           <View className="bg-white px-4 py-4 mb-3 text-center">
             <Text

@@ -61,49 +61,95 @@ export class MemesService {
     return { image_url: imageUrl, image_key: fileKey };
   }
 
-  // AI 生成图片
-  async generateImage(prompt: string) {
-    console.log('AI生成图片，prompt:', prompt);
+  // AI 生成图片（生成两张：梗名称图片和梗解释图片）
+  async generateImages(content: string, explanation?: string) {
+    console.log('AI生成两张图片，content:', content, 'explanation:', explanation);
 
-    const response = await this.imageClient.generate({
-      prompt: `${prompt}，诙谐幽默的表情包风格，夸张搞笑的卡通人物或动物表情，生动有趣的场景插画，充满喜剧效果的构图，色彩鲜艳明快，适合网络传播和社交分享，让人一看就忍不住笑出来`,
+    // 生成梗名称图片
+    const contentPrompt = `结合"${content}"这个梗的主题，设计一个诙谐幽默的表情包风格图片，夸张搞笑的卡通人物或动物表情，生动有趣的场景插画，充满喜剧效果的构图，色彩鲜艳明快，适合网络传播和社交分享，让人一看就忍不住笑出来`;
+
+    const contentResponse = await this.imageClient.generate({
+      prompt: contentPrompt,
       size: '2K',
       watermark: false,
     });
 
-    const helper = this.imageClient.getResponseHelper(response);
+    const contentHelper = this.imageClient.getResponseHelper(contentResponse);
 
-    if (!helper.success || !helper.imageUrls || helper.imageUrls.length === 0) {
-      throw new Error(helper.errorMessages?.join(', ') || 'AI生成失败');
+    if (!contentHelper.success || !contentHelper.imageUrls || contentHelper.imageUrls.length === 0) {
+      throw new Error(contentHelper.errorMessages?.join(', ') || 'AI生成梗名称图片失败');
     }
 
-    const imageUrl = helper.imageUrls[0];
-    console.log('AI生成图片成功，imageUrl:', imageUrl);
+    const contentImageUrl = contentHelper.imageUrls[0];
+    console.log('AI生成梗名称图片成功，imageUrl:', contentImageUrl);
 
-    // 将 AI 生成的图片上传到对象存储
+    // 将梗名称图片上传到对象存储
     const axios = require('axios');
-    const imageBuffer = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+    const contentImageBuffer = await axios.get(contentImageUrl, { responseType: 'arraybuffer' });
 
-    const fileKey = await this.storage.uploadFile({
-      fileContent: Buffer.from(imageBuffer.data),
-      fileName: `memes/ai_${Date.now()}.png`,
+    const contentFileKey = await this.storage.uploadFile({
+      fileContent: Buffer.from(contentImageBuffer.data),
+      fileName: `memes/ai_content_${Date.now()}.png`,
       contentType: 'image/png',
     });
 
-    const signedUrl = await this.storage.generatePresignedUrl({
-      key: fileKey,
+    const contentSignedUrl = await this.storage.generatePresignedUrl({
+      key: contentFileKey,
       expireTime: 86400 * 30,
     });
 
-    return { image_url: signedUrl, image_key: fileKey };
+    const result = {
+      content_image_url: contentSignedUrl,
+      content_image_key: contentFileKey,
+      explanation_image_url: null as string | null,
+      explanation_image_key: null as string | null,
+    };
+
+    // 如果有梗解释，生成梗解释图片
+    if (explanation && explanation.trim()) {
+      const explanationPrompt = `结合"${explanation}"这个梗的解释，设计一个诙谐幽默的表情包风格图片，夸张搞笑的卡通人物或动物表情，生动有趣的场景插画，充满喜剧效果的构图，色彩鲜艳明快，适合网络传播和社交分享，让人一看就忍不住笑出来`;
+
+      const explanationResponse = await this.imageClient.generate({
+        prompt: explanationPrompt,
+        size: '2K',
+        watermark: false,
+      });
+
+      const explanationHelper = this.imageClient.getResponseHelper(explanationResponse);
+
+      if (explanationHelper.success && explanationHelper.imageUrls && explanationHelper.imageUrls.length > 0) {
+        const explanationImageUrl = explanationHelper.imageUrls[0];
+        console.log('AI生成梗解释图片成功，imageUrl:', explanationImageUrl);
+
+        const explanationImageBuffer = await axios.get(explanationImageUrl, { responseType: 'arraybuffer' });
+
+        const explanationFileKey = await this.storage.uploadFile({
+          fileContent: Buffer.from(explanationImageBuffer.data),
+          fileName: `memes/ai_explanation_${Date.now()}.png`,
+          contentType: 'image/png',
+        });
+
+        const explanationSignedUrl = await this.storage.generatePresignedUrl({
+          key: explanationFileKey,
+          expireTime: 86400 * 30,
+        });
+
+        result.explanation_image_url = explanationSignedUrl;
+        result.explanation_image_key = explanationFileKey;
+      }
+    }
+
+    return result;
   }
 
   // 创建梗
   async createMeme(data: {
     content: string;
-    image_url: string;
-    image_key: string;
+    content_image_url: string;
+    content_image_key: string;
     explanation?: string;
+    explanation_image_url?: string | null;
+    explanation_image_key?: string | null;
     is_ai_generated: boolean;
     user_id: string;
     user_nickname: string;
@@ -112,7 +158,11 @@ export class MemesService {
 
     const { data: meme, error } = await this.supabase
       .from('memes')
-      .insert(data)
+      .insert({
+        ...data,
+        image_key: data.content_image_key, // 兼容字段
+        image_url: data.content_image_url, // 兼容字段
+      })
       .select()
       .single();
 

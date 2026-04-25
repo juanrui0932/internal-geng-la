@@ -31,9 +31,13 @@ export const memes = pgTable(
 		user_id: varchar("user_id", { length: 36 }).references(() => users.id, { onDelete: "set null" }), // 外键，关联用户表
 		user_nickname: varchar("user_nickname", { length: 50 }), // 上传者昵称（冗余，方便查询）
 		content: text("content").notNull(), // 梗文本（必填）
-		image_key: varchar("image_key", { length: 500 }), // 配图的对象存储 key（必填，可为 AI 生成或用户上传）
-		image_url: varchar("image_url", { length: 1000 }), // 配图的可访问 URL（持久化时优先存 key，此字段用于显示）
+		image_key: varchar("image_key", { length: 500 }), // 配图的对象存储 key（兼容字段，现在指向梗名称图片）
+		image_url: varchar("image_url", { length: 1000 }), // 配图的可访问 URL（兼容字段，现在指向梗名称图片）
+		content_image_key: varchar("content_image_key", { length: 500 }), // 梗名称图片的对象存储 key（必填）
+		content_image_url: varchar("content_image_url", { length: 1000 }), // 梗名称图片的可访问 URL
 		explanation: text("explanation"), // 解释（可选）
+		explanation_image_key: varchar("explanation_image_key", { length: 500 }), // 梗解释图片的对象存储 key（可选）
+		explanation_image_url: varchar("explanation_image_url", { length: 1000 }), // 梗解释图片的可访问 URL
 		is_ai_generated: boolean("is_ai_generated").default(false).notNull(), // 是否 AI 生成
 		like_count: integer("like_count").default(0).notNull(), // 点赞数
 		comment_count: integer("comment_count").default(0).notNull(), // 评论数
