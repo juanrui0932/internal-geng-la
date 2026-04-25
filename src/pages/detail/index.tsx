@@ -208,7 +208,14 @@ export default function Detail() {
   const isOwnMeme = userInfo && meme && userInfo.id === meme.user_id
 
   if (loading) {
-    // 检查是否已删除
+    return (
+      <View className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Text className="block text-gray-500">加载中...</Text>
+      </View>
+    )
+  }
+
+  // 检查是否已删除
   if (deleted) {
     return (
       <View className="min-h-screen bg-gradient-to-b from-blue-100 to-green-100 flex flex-col items-center justify-center px-8">
@@ -248,13 +255,6 @@ export default function Detail() {
         >
           返回梗的发园
         </Button>
-      </View>
-    )
-  }
-
-  return (
-      <View className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Text className="block text-gray-500">加载中...</Text>
       </View>
     )
   }
