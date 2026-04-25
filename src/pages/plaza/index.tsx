@@ -60,6 +60,12 @@ export default function Plaza() {
     }
   }
 
+  const handleCardClick = (memeId: string) => {
+    Taro.navigateTo({
+      url: `/pages/detail/index?id=${memeId}`
+    })
+  }
+
   Taro.useDidShow(() => {
     loadMemes()
   })
@@ -84,7 +90,7 @@ export default function Plaza() {
           </View>
         ) : (
           memes.map((meme) => (
-            <Card key={meme.id} className="mb-4">
+            <Card key={meme.id} className="mb-4" onClick={() => handleCardClick(meme.id)}>
               <CardContent className="p-4">
                 <Image
                   src={meme.image_url}
@@ -127,7 +133,10 @@ export default function Plaza() {
                   <View className="flex items-center gap-4">
                     <View
                       className="flex items-center gap-1"
-                      onClick={() => handleLike(meme.id)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleLike(meme.id)
+                      }}
                     >
                       <Heart size={16} color="#ef4444" className="mr-1" />
                       <Text className="block text-sm text-gray-600">{meme.like_count}</Text>
