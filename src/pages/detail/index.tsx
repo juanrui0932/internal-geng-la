@@ -203,10 +203,6 @@ export default function Detail() {
     loadMemeDetail()
   })
 
-  // 获取当前用户信息
-  const userInfo = Taro.getStorageSync('userInfo')
-  const isOwnMeme = userInfo && meme && userInfo.id === meme.user_id
-
   if (loading) {
     return (
       <View className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -266,6 +262,18 @@ export default function Detail() {
       </View>
     )
   }
+
+  // 获取当前用户信息
+  const userInfo = Taro.getStorageSync('userInfo')
+  const isOwnMeme = userInfo && meme && userInfo.id === meme.user_id
+
+  console.log('删除按钮检查:', {
+    hasUserInfo: !!userInfo,
+    hasMeme: !!meme,
+    userId: userInfo?.id,
+    memeUserId: meme?.user_id,
+    isOwnMeme
+  })
 
   return (
     <View className="min-h-screen bg-gray-50 pb-20">
