@@ -1,5 +1,5 @@
 import { View, Text } from '@tarojs/components'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
@@ -11,6 +11,17 @@ import './index.css'
 export default function Welcome() {
   const [nickname, setNickname] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // 检查是否已有昵称，如果有则直接跳转
+  useEffect(() => {
+    const savedNickname = Taro.getStorageSync('nickname')
+    const savedUserInfo = Taro.getStorageSync('userInfo')
+
+    if (savedNickname && savedUserInfo) {
+      // 已有昵称，直接跳转到首页
+      Taro.switchTab({ url: '/pages/index/index' })
+    }
+  }, [])
 
   const handleStart = async () => {
     if (!nickname || nickname.trim().length < 2) {
@@ -38,6 +49,8 @@ export default function Welcome() {
       if (res.data && res.data.code === 200) {
         // 保存用户信息到本地
         Taro.setStorageSync('userInfo', res.data.data)
+        // 单独保存昵称到本地，下次自动登录
+        Taro.setStorageSync('nickname', nickname.trim())
 
         Taro.showToast({ title: '欢迎加入！', icon: 'success' })
 

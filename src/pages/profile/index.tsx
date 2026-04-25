@@ -54,8 +54,9 @@ export default function Profile() {
       content: '确定要退出登录吗？',
       success: (res) => {
         if (res.confirm) {
-          // 清除用户信息
+          // 清除用户信息和昵称
           Taro.removeStorageSync('userInfo')
+          Taro.removeStorageSync('nickname')
           Taro.showToast({ title: '已退出登录', icon: 'success' })
           // 跳转到欢迎页
           setTimeout(() => {
