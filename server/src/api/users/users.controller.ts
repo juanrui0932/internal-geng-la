@@ -1,33 +1,22 @@
-import { Controller, Get, Post, Body, Param, HttpCode, ConflictException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, HttpCode } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // 创建用户
+  // 创建或登录用户
   @Post()
   @HttpCode(200)
   async createUser(@Body() body: { nickname: string }) {
-    console.log('收到创建用户请求:', body.nickname);
+    console.log('收到创建/登录用户请求:', body.nickname);
 
-    try {
-      const user = await this.usersService.createUser(body);
-      return {
-        code: 200,
-        msg: 'success',
-        data: user,
-      };
-    } catch (error) {
-      if (error instanceof ConflictException) {
-        return {
-          code: 400,
-          msg: error.message,
-          data: null,
-        };
-      }
-      throw error;
-    }
+    const user = await this.usersService.createUser(body);
+    return {
+      code: 200,
+      msg: 'success',
+      data: user,
+    };
   }
 
   // 获取用户信息

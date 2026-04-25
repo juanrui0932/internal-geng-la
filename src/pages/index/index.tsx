@@ -117,11 +117,6 @@ export default function Index() {
                   <Text className="block text-lg font-semibold text-gray-900 mb-2">
                     {meme.content}
                   </Text>
-                  {meme.explanation && (
-                    <Text className="block text-sm text-gray-600">
-                      {meme.explanation}
-                    </Text>
-                  )}
                 </View>
                 <View className="flex items-center justify-between">
                   <View className="flex items-center gap-2">

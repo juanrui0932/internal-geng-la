@@ -5,21 +5,24 @@ import { getSupabaseClient } from '@/storage/database/supabase-client';
 export class UsersService {
   private supabase = getSupabaseClient();
 
-  // 创建用户
+  // 创建或登录用户
   async createUser(data: { nickname: string }) {
-    console.log('创建用户:', data);
+    console.log('创建/登录用户:', data);
 
     // 检查昵称是否已存在
     const { data: existing } = await this.supabase
       .from('users')
-      .select('id')
+      .select('*')
       .eq('nickname', data.nickname)
       .single();
 
     if (existing) {
-      throw new ConflictException('昵称已存在');
+      // 昵称已存在，直接返回用户信息（登录）
+      console.log('用户已存在，直接登录:', existing);
+      return existing;
     }
 
+    // 创建新用户
     const { data: user, error } = await this.supabase
       .from('users')
       .insert(data)

@@ -122,11 +122,6 @@ export default function Plaza() {
                   <Text className="block text-lg font-semibold text-gray-900 mb-2">
                     {meme.content}
                   </Text>
-                  {meme.explanation && (
-                    <Text className="block text-sm text-gray-600">
-                      {meme.explanation}
-                    </Text>
-                  )}
                 </View>
 
                 <View className="flex items-center justify-between pt-3 border-t border-gray-100">

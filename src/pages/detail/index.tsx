@@ -199,6 +199,15 @@ export default function Detail() {
           />
         </View>
 
+        {/* 梗解释（放在图片下面，放大加粗，特殊字体） */}
+        {meme.explanation && (
+          <View className="bg-white px-4 py-4 mb-3">
+            <Text className="block text-2xl font-serif font-bold text-gray-900 leading-relaxed">
+              {meme.explanation}
+            </Text>
+          </View>
+        )}
+
         {/* 梗内容 */}
         <Card className="mx-4 mb-3">
           <CardContent className="p-4">
@@ -227,14 +236,6 @@ export default function Detail() {
             <Text className="block text-lg font-semibold text-gray-900 mb-3">
               {meme.content}
             </Text>
-
-            {meme.explanation && (
-              <View className="bg-gray-50 rounded-lg p-3">
-                <Text className="block text-sm text-gray-600">
-                  {meme.explanation}
-                </Text>
-              </View>
-            )}
 
             <View className="flex items-center gap-6 mt-4 pt-4 border-t border-gray-100">
               <View
