@@ -81,95 +81,107 @@ export class MemesService {
 
     const axios = require('axios');
 
-    // 准备提示词（精简版，明确要求幽默和内容契合）
-    const contentPrompt = `${content}，幽默搞笑，内容契合的卡通图`;
-    const explanationPrompt = `${explanation}，幽默搞笑，内容契合的插画`;
+    // 精简提示词
+    const contentPrompt = `${content}，幽默搞笑卡通图`;
+    const explanationPrompt = `${explanation}，幽默搞笑插画`;
 
-    // 并行生成两张图片（使用1K分辨率，速度更快）
+    // 并行生成两张图片（使用720P分辨率，速度更快，成功率更高）
     const startTime = Date.now();
     console.log('开始并行生成两张图片...');
 
-    const [contentResponse, explanationResponse] = await Promise.all([
-      this.imageClient.generate({
-        prompt: contentPrompt,
-        size: '1K',
-        watermark: false,
-      }),
-      this.imageClient.generate({
-        prompt: explanationPrompt,
-        size: '1K',
-        watermark: false,
-      }),
-    ]);
+    try {
+      const [contentResponse, explanationResponse] = await Promise.all([
+        this.imageClient.generate({
+          prompt: contentPrompt,
+          size: '720P',  // 改为720P，速度更快
+          watermark: false,
+        }).catch(err => {
+          console.error('生成梗名称图片失败:', err);
+          return null;
+        }),
+        this.imageClient.generate({
+          prompt: explanationPrompt,
+          size: '720P',  // 改为720P，速度更快
+          watermark: false,
+        }).catch(err => {
+          console.error('生成梗解释图片失败:', err);
+          return null;
+        }),
+      ]);
 
-    console.log('两张图片AI生成完成，耗时:', (Date.now() - startTime) / 1000, '秒');
+      console.log('两张图片AI生成完成，耗时:', (Date.now() - startTime) / 1000, '秒');
 
-    // 处理梗名称图片
-    const contentHelper = this.imageClient.getResponseHelper(contentResponse);
+      // 检查生成结果
+      if (!contentResponse || !explanationResponse) {
+        throw new Error('AI生成图片失败，请重试');
+      }
 
-    if (!contentHelper.success || !contentHelper.imageUrls || contentHelper.imageUrls.length === 0) {
-      throw new Error(contentHelper.errorMessages?.join(', ') || 'AI生成梗名称图片失败');
+      const contentHelper = this.imageClient.getResponseHelper(contentResponse);
+      const explanationHelper = this.imageClient.getResponseHelper(explanationResponse);
+
+      if (!contentHelper.success || !contentHelper.imageUrls || contentHelper.imageUrls.length === 0) {
+        throw new Error(contentHelper.errorMessages?.join(', ') || 'AI生成梗名称图片失败');
+      }
+
+      if (!explanationHelper.success || !explanationHelper.imageUrls || explanationHelper.imageUrls.length === 0) {
+        throw new Error(explanationHelper.errorMessages?.join(', ') || 'AI生成梗解释图片失败');
+      }
+
+      const contentImageUrl = contentHelper.imageUrls[0];
+      const explanationImageUrl = explanationHelper.imageUrls[0];
+      console.log('AI生成梗名称图片成功，imageUrl:', contentImageUrl);
+      console.log('AI生成梗解释图片成功，imageUrl:', explanationImageUrl);
+
+      // 并行下载两张图片
+      console.log('开始并行下载两张图片...');
+      const [contentImageBuffer, explanationImageBuffer] = await Promise.all([
+        axios.get(contentImageUrl, { responseType: 'arraybuffer' }),
+        axios.get(explanationImageUrl, { responseType: 'arraybuffer' }),
+      ]);
+
+      console.log('两张图片下载完成');
+
+      // 并行上传两张图片到对象存储
+      console.log('开始并行上传两张图片到对象存储...');
+      const [contentFileKey, explanationFileKey] = await Promise.all([
+        this.storage.uploadFile({
+          fileContent: Buffer.from(contentImageBuffer.data),
+          fileName: `memes/ai_content_${Date.now()}.png`,
+          contentType: 'image/png',
+        }),
+        this.storage.uploadFile({
+          fileContent: Buffer.from(explanationImageBuffer.data),
+          fileName: `memes/ai_explanation_${Date.now()}.png`,
+          contentType: 'image/png',
+        }),
+      ]);
+
+      console.log('两张图片上传完成');
+
+      // 并行生成签名URL
+      const [contentSignedUrl, explanationSignedUrl] = await Promise.all([
+        this.storage.generatePresignedUrl({
+          key: contentFileKey,
+          expireTime: 86400 * 30,
+        }),
+        this.storage.generatePresignedUrl({
+          key: explanationFileKey,
+          expireTime: 86400 * 30,
+        }),
+      ]);
+
+      console.log('AI生成图片总耗时:', (Date.now() - startTime) / 1000, '秒');
+
+      return {
+        content_image_url: contentSignedUrl,
+        content_image_key: contentFileKey,
+        explanation_image_url: explanationSignedUrl,
+        explanation_image_key: explanationFileKey,
+      };
+    } catch (error) {
+      console.error('AI生成图片过程出错:', error);
+      throw new Error(error.message || 'AI生成图片失败，请重试');
     }
-
-    const contentImageUrl = contentHelper.imageUrls[0];
-    console.log('AI生成梗名称图片成功，imageUrl:', contentImageUrl);
-
-    // 处理梗解释图片
-    const explanationHelper = this.imageClient.getResponseHelper(explanationResponse);
-
-    if (!explanationHelper.success || !explanationHelper.imageUrls || explanationHelper.imageUrls.length === 0) {
-      throw new Error(explanationHelper.errorMessages?.join(', ') || 'AI生成梗解释图片失败');
-    }
-
-    const explanationImageUrl = explanationHelper.imageUrls[0];
-    console.log('AI生成梗解释图片成功，imageUrl:', explanationImageUrl);
-
-    // 并行下载两张图片
-    console.log('开始并行下载两张图片...');
-    const [contentImageBuffer, explanationImageBuffer] = await Promise.all([
-      axios.get(contentImageUrl, { responseType: 'arraybuffer' }),
-      axios.get(explanationImageUrl, { responseType: 'arraybuffer' }),
-    ]);
-
-    console.log('两张图片下载完成');
-
-    // 并行上传两张图片到对象存储
-    console.log('开始并行上传两张图片到对象存储...');
-    const [contentFileKey, explanationFileKey] = await Promise.all([
-      this.storage.uploadFile({
-        fileContent: Buffer.from(contentImageBuffer.data),
-        fileName: `memes/ai_content_${Date.now()}.png`,
-        contentType: 'image/png',
-      }),
-      this.storage.uploadFile({
-        fileContent: Buffer.from(explanationImageBuffer.data),
-        fileName: `memes/ai_explanation_${Date.now()}.png`,
-        contentType: 'image/png',
-      }),
-    ]);
-
-    console.log('两张图片上传完成');
-
-    // 并行生成签名URL
-    const [contentSignedUrl, explanationSignedUrl] = await Promise.all([
-      this.storage.generatePresignedUrl({
-        key: contentFileKey,
-        expireTime: 86400 * 30,
-      }),
-      this.storage.generatePresignedUrl({
-        key: explanationFileKey,
-        expireTime: 86400 * 30,
-      }),
-    ]);
-
-    console.log('AI生成图片总耗时:', (Date.now() - startTime) / 1000, '秒');
-
-    return {
-      content_image_url: contentSignedUrl,
-      content_image_key: contentFileKey,
-      explanation_image_url: explanationSignedUrl,
-      explanation_image_key: explanationFileKey,
-    };
   }
 
   // 创建梗
