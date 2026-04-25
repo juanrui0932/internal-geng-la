@@ -24,7 +24,17 @@ export class UsersService {
   async generateAvatar(nickname: string) {
     console.log('根据昵称生成头像:', nickname);
 
-    const prompt = `结合"${nickname}"这个昵称，设计一个诙谐幽默的头像，夸张搞笑的卡通人物表情，生动有趣的动漫风格，充满喜剧效果，色彩鲜艳明快，适合作为社交媒体头像，让人一看就觉得好笑和亲切`;
+    const prompt = `设计一个"玩内部梗啦！"风格的卡通头像，昵称是"${nickname}"。
+画面要求：
+1. 卡通风格：夸张搞笑的Q版人物或动物形象
+2. 个性化：根据昵称特点设计独特的形象特征
+3. 头像构图：正脸或半侧面，适合作为社交媒体头像
+4. 表情生动有趣，充满喜剧效果和亲和力
+5. 色彩鲜艳明快，扁平化插画风格
+6. 线条简洁，细节清晰
+7. 让人一看就觉得好笑、有趣、想互动
+8. 可以加入与昵称相关的道具、配饰或背景元素
+9. 整体风格统一，与梗图风格保持一致`;
 
     const response = await this.imageClient.generate({
       prompt: prompt,

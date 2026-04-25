@@ -76,7 +76,15 @@ export class MemesService {
     console.log('AI生成两张图片，content:', content, 'explanation:', explanation);
 
     // 生成梗名称图片
-    const contentPrompt = `结合"${content}"这个梗的主题，设计一个诙谐幽默的表情包风格图片，夸张搞笑的卡通人物或动物表情，生动有趣的场景插画，充满喜剧效果的构图，色彩鲜艳明快，适合网络传播和社交分享，让人一看就忍不住笑出来`;
+    const contentPrompt = `设计一个"玩内部梗啦！"风格的梗图，主题是"${content}"。
+画面要求：
+1. 表情包风格：夸张搞笑的卡通人物表情，生动有趣
+2. 构图充满喜剧效果，色彩鲜艳明快
+3. 可以包含梗的文字或符号元素，增加识别度
+4. 适合网络传播和社交分享
+5. 让人一看就明白这个梗的含义，同时忍不住笑出来
+6. 风格统一：扁平化插画，线条简洁，色彩饱和度高
+7. 可以加入emoji、表情符号等现代网络元素`;
 
     const contentResponse = await this.imageClient.generate({
       prompt: contentPrompt,
@@ -117,7 +125,15 @@ export class MemesService {
 
     // 如果有梗解释，生成梗解释图片
     if (explanation && explanation.trim()) {
-      const explanationPrompt = `结合"${explanation}"这个梗的解释，设计一个诙谐幽默的表情包风格图片，夸张搞笑的卡通人物或动物表情，生动有趣的场景插画，充满喜剧效果的构图，色彩鲜艳明快，适合网络传播和社交分享，让人一看就忍不住笑出来`;
+      const explanationPrompt = `设计一个"玩内部梗啦！"风格的梗解释插画，主题是"${explanation}"。
+画面要求：
+1. 场景化插画：用具体场景来展现梗的含义和情境
+2. 夸张搞笑的卡通人物或动物，表情生动有趣
+3. 构图充满戏剧性和喜剧效果，色彩鲜艳明快
+4. 通过画面讲好梗的故事，让观众理解梗的来龙去脉
+5. 适合在详情页展示，与梗名称图片形成呼应
+6. 风格统一：扁平化插画，线条简洁，色彩饱和度高
+7. 可以加入文字气泡、对话框等元素，增强叙事性`;
 
       const explanationResponse = await this.imageClient.generate({
         prompt: explanationPrompt,
