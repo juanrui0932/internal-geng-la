@@ -33,12 +33,22 @@ export class MemesService {
   async getMemes(order: string = 'created_at', limit: number = 20) {
     const { data, error } = await this.supabase
       .from('memes')
-      .select('*')
+      .select(`
+        *,
+        users (
+          avatar_url
+        )
+      `)
       .order(order, { ascending: false })
       .limit(limit);
 
     if (error) throw new Error(`获取梗列表失败: ${error.message}`);
-    return data;
+
+    // 将 users.avatar_url 合并到 meme 对象中
+    return data.map((meme: any) => ({
+      ...meme,
+      user_avatar_url: meme.users?.avatar_url || null,
+    }));
   }
 
   // 上传图片到对象存储

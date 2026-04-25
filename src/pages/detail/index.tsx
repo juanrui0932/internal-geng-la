@@ -21,6 +21,7 @@ interface MemeDetail {
   comment_count: number
   is_ai_generated: boolean
   user_nickname?: string
+  user_avatar_url?: string
   created_at: string
 }
 
@@ -246,11 +247,21 @@ export default function Detail() {
               <View className="flex items-center">
                 {meme.user_nickname && (
                   <>
-                    <Avatar className="w-8 h-8 bg-orange-100">
-                      <Text className="block text-sm font-bold text-orange-600">
-                        {meme.user_nickname.charAt(0)}
-                      </Text>
-                    </Avatar>
+                    {meme.user_avatar_url ? (
+                      <Avatar className="w-8 h-8 bg-orange-100 rounded-full overflow-hidden">
+                        <Image
+                          src={meme.user_avatar_url}
+                          className="w-full h-full"
+                          mode="aspectFill"
+                        />
+                      </Avatar>
+                    ) : (
+                      <Avatar className="w-8 h-8 bg-orange-100">
+                        <Text className="block text-sm font-bold text-orange-600">
+                          {meme.user_nickname.charAt(0)}
+                        </Text>
+                      </Avatar>
+                    )}
                     <Text className="block text-sm text-gray-600 ml-2">
                       {meme.user_nickname}
                     </Text>

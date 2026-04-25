@@ -80,11 +80,21 @@ export default function Profile() {
       {/* 头部信息 */}
       <View className="bg-white p-6 mb-4">
         <View className="flex items-center">
-          <Avatar className="w-16 h-16 bg-orange-500">
-            <Text className="block text-2xl font-bold text-white">
-              {userInfo?.nickname?.charAt(0) || '内'}
-            </Text>
-          </Avatar>
+          {userInfo?.avatar_url ? (
+            <Avatar className="w-16 h-16 bg-orange-500 rounded-full overflow-hidden">
+              <Image
+                src={userInfo.avatar_url}
+                className="w-full h-full"
+                mode="aspectFill"
+              />
+            </Avatar>
+          ) : (
+            <Avatar className="w-16 h-16 bg-orange-500">
+              <Text className="block text-2xl font-bold text-white">
+                {userInfo?.nickname?.charAt(0) || '内'}
+              </Text>
+            </Avatar>
+          )}
           <View className="ml-4">
             <Text className="block text-xl font-bold text-gray-900">
               {userInfo?.nickname || '未设置'}
