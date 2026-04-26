@@ -1,0 +1,39 @@
+{
+  "version": "1",
+  "services": [
+    {
+      "type": "web",
+      "name": "internal-geng-la-api",
+      "env": "node",
+      "buildCommand": "cd server && npm install && npm run build",
+      "startCommand": "cd server && npm run start:prod",
+      "envVars": [
+        {
+          "key": "PORT",
+          "value": "10000"
+        },
+        {
+          "key": "PROJECT_DOMAIN",
+          "generateValue": true
+        }
+      ]
+    },
+    {
+      "type": "web",
+      "name": "internal-geng-la-web",
+      "env": "static",
+      "buildCommand": "pnpm install && pnpm build:web",
+      "staticPublishPath": "./dist-web",
+      "envVars": [
+        {
+          "key": "PROJECT_DOMAIN",
+          "fromService": {
+            "type": "web",
+            "name": "internal-geng-la-api",
+            "property": "url"
+          }
+        }
+      ]
+    }
+  ]
+}

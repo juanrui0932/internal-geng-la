@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "name": "internal-geng-la",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist-web"
+      }
+    },
+    {
+      "src": "server/package.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/server/index.js"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {
+    "PROJECT_DOMAIN": "@project-domain"
+  },
+  "build": {
+    "env": {
+      "PROJECT_DOMAIN": "@project-domain"
+    }
+  }
+}
