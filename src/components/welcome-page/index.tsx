@@ -65,12 +65,6 @@ export default function WelcomePage({ onEnter }: WelcomePageProps) {
         )}
 
         {showButton && (
-          <View className="subtitle">
-            <Text>一起探索有趣的梗图世界吧</Text>
-          </View>
-        )}
-
-        {showButton && (
           <View className="start-button" onClick={onEnter}>
             <Text>开始探索</Text>
           </View>
