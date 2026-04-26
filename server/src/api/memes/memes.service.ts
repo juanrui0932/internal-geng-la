@@ -93,7 +93,6 @@ export class MemesService {
       const [contentResponse, explanationResponse] = await Promise.all([
         this.imageClient.generate({
           prompt: contentPrompt,
-          model: 'doubao-seedream-5-0-260128',
           size: '2K',
           watermark: false,
         }).catch(err => {
@@ -102,7 +101,6 @@ export class MemesService {
         }),
         this.imageClient.generate({
           prompt: explanationPrompt,
-          model: 'doubao-seedream-5-0-260128',
           size: '2K',
           watermark: false,
         }).catch(err => {
