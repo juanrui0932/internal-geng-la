@@ -93,7 +93,8 @@ export class MemesService {
       const [contentResponse, explanationResponse] = await Promise.all([
         this.imageClient.generate({
           prompt: contentPrompt,
-          size: '720P',  // 改为720P，速度更快
+          model: 'doubao-seedream-5-0-260128',
+          size: '2K',
           watermark: false,
         }).catch(err => {
           console.error('生成梗名称图片失败:', err);
@@ -101,7 +102,8 @@ export class MemesService {
         }),
         this.imageClient.generate({
           prompt: explanationPrompt,
-          size: '720P',  // 改为720P，速度更快
+          model: 'doubao-seedream-5-0-260128',
+          size: '2K',
           watermark: false,
         }).catch(err => {
           console.error('生成梗解释图片失败:', err);
