@@ -9,8 +9,9 @@ export default defineAppConfig({
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: '玩内部梗啦！',
-    navigationBarTextStyle: 'black'
+    navigationBarTitleText: '',
+    navigationBarTextStyle: 'black',
+    navigationStyle: 'custom'
   },
   tabBar: {
     color: '#999999',
