@@ -1,0 +1,240 @@
+/* 酷炫欢迎页样式 */
+
+.welcome-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  overflow: hidden;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 粒子背景 */
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: float 20s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-100px) rotate(180deg);
+    opacity: 0.8;
+  }
+}
+
+/* 欢迎文字容器 */
+.welcome-text-container {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* 欢迎标题 */
+.welcome-title {
+  font-size: 28px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.8),
+    0 0 20px rgba(255, 255, 255, 0.6),
+    0 0 30px rgba(255, 255, 255, 0.4),
+    0 0 40px rgba(255, 255, 255, 0.2);
+  animation: titlePulse 2s ease-in-out infinite, titleFloat 3s ease-in-out infinite;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+@keyframes titlePulse {
+  0%, 100% {
+    transform: scale(1);
+    text-shadow:
+      0 0 10px rgba(255, 255, 255, 0.8),
+      0 0 20px rgba(255, 255, 255, 0.6),
+      0 0 30px rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    text-shadow:
+      0 0 20px rgba(255, 255, 255, 1),
+      0 0 40px rgba(255, 255, 255, 0.8),
+      0 0 60px rgba(255, 255, 255, 0.6);
+  }
+}
+
+@keyframes titleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 逐字显示动画 */
+.welcome-char {
+  display: inline-block;
+  animation: charAppear 0.5s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes charAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 花朵装饰 */
+.flower-decoration {
+  position: absolute;
+  font-size: 40px;
+  animation: flowerSpin 10s linear infinite;
+}
+
+.flower-decoration.top-left {
+  top: 50px;
+  left: 30px;
+  animation-delay: 0s;
+}
+
+.flower-decoration.top-right {
+  top: 80px;
+  right: 40px;
+  animation-delay: -2s;
+}
+
+.flower-decoration.bottom-left {
+  bottom: 100px;
+  left: 50px;
+  animation-delay: -4s;
+}
+
+.flower-decoration.bottom-right {
+  bottom: 120px;
+  right: 60px;
+  animation-delay: -6s;
+}
+
+@keyframes flowerSpin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* 光圈效果 */
+.glow-circle {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  animation: glowPulse 4s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+/* 开始按钮 */
+.start-button {
+  margin-top: 40px;
+  padding: 16px 48px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50px;
+  box-shadow:
+    0 0 20px rgba(102, 126, 234, 0.5),
+    0 0 40px rgba(118, 75, 162, 0.3),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  animation: buttonPulse 2s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.start-button:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 30px rgba(102, 126, 234, 0.7),
+    0 0 60px rgba(118, 75, 162, 0.5),
+    inset 0 0 30px rgba(255, 255, 255, 0.2);
+}
+
+.start-button:active {
+  transform: scale(0.95);
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(102, 126, 234, 0.5),
+      0 0 40px rgba(118, 75, 162, 0.3),
+      inset 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(102, 126, 234, 0.7),
+      0 0 60px rgba(118, 75, 162, 0.5),
+      inset 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* 副标题 */
+.subtitle {
+  margin-top: 20px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 2s;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

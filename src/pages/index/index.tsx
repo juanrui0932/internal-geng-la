@@ -1,8 +1,9 @@
 import { View, Text } from '@tarojs/components'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import FlowerMeme from '@/components/flower-meme'
 import EmptyPot from '@/components/empty-pot'
+import WelcomePage from '@/components/welcome-page'
 import Taro from '@tarojs/taro'
 import { Network } from '@/network'
 import '@/components/garden/garden.css'
@@ -22,6 +23,20 @@ interface Meme {
 export default function Index() {
   const [memes, setMemes] = useState<Meme[]>([])
   const [loading, setLoading] = useState(false)
+  const [showWelcome, setShowWelcome] = useState(true)
+
+  // 检查是否首次访问
+  useEffect(() => {
+    const hasVisited = Taro.getStorageSync('has_visited_home')
+    if (hasVisited) {
+      setShowWelcome(false)
+    }
+  }, [])
+
+  const handleEnterWelcome = () => {
+    Taro.setStorageSync('has_visited_home', 'true')
+    setShowWelcome(false)
+  }
 
   const loadMemes = async () => {
     try {
@@ -57,54 +72,62 @@ export default function Index() {
   })
 
   return (
-    <View className="garden-container">
-      {/* 太阳 */}
-      <View className="sun" />
+    <>
+      {/* 欢迎页 */}
+      {showWelcome && <WelcomePage onEnter={handleEnterWelcome} />}
 
-      {/* 云朵 */}
-      <View className="cloud cloud-1" />
-      <View className="cloud cloud-2" />
+      {/* 主页面 */}
+      {!showWelcome && (
+        <View className="garden-container">
+          {/* 太阳 */}
+          <View className="sun" />
 
-      {/* 底部草地 */}
-      <View className="grass" />
+          {/* 云朵 */}
+          <View className="cloud cloud-1" />
+          <View className="cloud cloud-2" />
 
-      {/* 标题 */}
-      <View className="garden-title">
-        <Text className="garden-title-text">🌸 梗的发园 🌸</Text>
-      </View>
+          {/* 底部草地 */}
+          <View className="grass" />
 
-      {/* 花朵网格 */}
-      {loading ? (
-        <View className="garden-loading">
-          <Text className="garden-loading-text">正在种植花朵...</Text>
-        </View>
-      ) : memes.length === 0 ? (
-        <View className="garden-empty">
-          <Text className="garden-empty-text">
-            花园还没有花朵呢{'\n'}
-            快去种植你的第一朵梗花吧！
-          </Text>
-          <Button
-            className="bg-white text-orange-500 mt-6"
-            onClick={() => Taro.switchTab({ url: '/pages/publish/index' })}
-          >
-            种植花朵
-          </Button>
-        </View>
-      ) : (
-        <View className="flowers-grid">
-          {memes.map((meme, index) => (
-            <FlowerMeme
-              key={meme.id}
-              meme={meme}
-              index={index}
-              onClick={() => handleFlowerClick(meme.id)}
-            />
-          ))}
-          {/* 空花盆 - 点击种植 */}
-          <EmptyPot index={memes.length} />
+          {/* 标题 */}
+          <View className="garden-title">
+            <Text className="garden-title-text">🌸 梗的发园 🌸</Text>
+          </View>
+
+          {/* 花朵网格 */}
+          {loading ? (
+            <View className="garden-loading">
+              <Text className="garden-loading-text">正在种植花朵...</Text>
+            </View>
+          ) : memes.length === 0 ? (
+            <View className="garden-empty">
+              <Text className="garden-empty-text">
+                花园还没有花朵呢{'\n'}
+                快去种植你的第一朵梗花吧！
+              </Text>
+              <Button
+                className="bg-white text-orange-500 mt-6"
+                onClick={() => Taro.switchTab({ url: '/pages/publish/index' })}
+              >
+                种植花朵
+              </Button>
+            </View>
+          ) : (
+            <View className="flowers-grid">
+              {memes.map((meme, index) => (
+                <FlowerMeme
+                  key={meme.id}
+                  meme={meme}
+                  index={index}
+                  onClick={() => handleFlowerClick(meme.id)}
+                />
+              ))}
+              {/* 空花盆 - 点击种植 */}
+              <EmptyPot index={memes.length} />
+            </View>
+          )}
         </View>
       )}
-    </View>
+    </>
   )
 }
