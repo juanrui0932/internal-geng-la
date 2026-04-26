@@ -93,7 +93,7 @@ export class MemesService {
       const [contentResponse, explanationResponse] = await Promise.all([
         this.imageClient.generate({
           prompt: contentPrompt,
-          size: '2K',
+          size: '1080P',
           watermark: false,
         }).catch(err => {
           console.error('生成梗名称图片失败:', err);
@@ -101,7 +101,7 @@ export class MemesService {
         }),
         this.imageClient.generate({
           prompt: explanationPrompt,
-          size: '2K',
+          size: '1080P',
           watermark: false,
         }).catch(err => {
           console.error('生成梗解释图片失败:', err);
