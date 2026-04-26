@@ -81,9 +81,9 @@ export class MemesService {
 
     const axios = require('axios');
 
-    // 精简提示词
-    const contentPrompt = `${content}，幽默搞笑卡通图`;
-    const explanationPrompt = `${explanation}，幽默搞笑插画`;
+    // 优化提示词 - 诙谐幽默，成熟有趣
+    const contentPrompt = `${content}，诙谐幽默风格，成熟有趣，机智搞笑，不要幼稚风格`;
+    const explanationPrompt = `${explanation}，诙谐幽默插画，成熟有趣，机智搞笑，不要幼稚风格`;
 
     // 并行生成两张图片（使用720P分辨率，速度更快，成功率更高）
     const startTime = Date.now();
