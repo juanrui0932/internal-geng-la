@@ -82,8 +82,8 @@ export class MemesService {
     const axios = require('axios');
 
     // 优化提示词 - 与语义相关，诙谐讽刺幽默
-    const contentPrompt = `${content}，与内容语义高度相关，诙谐讽刺风格，幽默风趣，机智搞笑，充满智慧的幽默感`;
-    const explanationPrompt = `${explanation}，与解释语义高度相关，诙谐讽刺风格，幽默风趣，机智搞笑，充满智慧的幽默感`;
+    const contentPrompt = `${content}，与内容语义高度相关，诙谐讽刺风格，幽默风趣，机智搞笑`;
+    const explanationPrompt = `${explanation}，与解释语义高度相关，诙谐讽刺风格，幽默风趣，机智搞笑`;
 
     // 并行生成两张图片（使用720P分辨率，速度更快，成功率更高）
     const startTime = Date.now();
